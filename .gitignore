@@ -2,3 +2,4 @@ original/*
 *.RData
 *.Rhistory
 *.history
+*.csv
