@@ -1,13 +1,20 @@
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
+
 #################################################################
 # Looking at correlations of environmental variables with plot composition
 #################################################################
 # Clear Memory
+
 rm(list=ls())
-load("Composition_15Apr2014.RData")
+
+# load("Composition_15Apr2014.RData")
+set.seed(314) # set random seed so everything can be exactly reproduced
 
 
 # Load required packages
+
 library(vegan)
+
 library(lattice)
 library(lme4)
 library(nlme)
@@ -15,6 +22,7 @@ library(reshape2)
 library(ggplot2)
 library(grid)
 library(car)
+
 
 # Standard Error Function
 se <- function(x){
@@ -28,10 +36,10 @@ large.axes2 <- theme(axis.line=element_line(color="black", size=0.5), panel.grid
 #################################################################
 # Comparing species size class distributions
 #################################################################
-trees <- read.csv("TreeData.csv")
+trees <- read.csv("Data/raw_inputs/TreeData.csv")
 summary(trees)
 
-spp.list <- read.csv("SppList.csv")
+spp.list <- read.csv("Data/raw_inputs/SppList.csv")
 summary(spp.list)
 
 trees2 <- merge(trees, spp.list[,c("Spp", "Spp.Group")], all.x=T, all.y=F)
@@ -39,7 +47,7 @@ trees2$Canopy.code <- recode(trees2$Canopy, "''='NA'; '*'='NA'; 'U'='1'; 'I'='2'
 levels(trees2$Canopy.code) <- c("U", "I", "C", "D", NA)
 summary(trees2)
 
-group.col <- read.csv("GroupColors.csv")
+group.col <- read.csv("Data/raw_inputs/GroupColors.csv")
 group.col <- group.col[order(group.col$Spp),]
 summary(group.col)
 
@@ -69,13 +77,16 @@ ggplot(data=trees2[!is.na(trees2$Canopy.code),]) + large.axes2 +
 #################################################################
 
 ######################
+
 # 0. Importing plots & species matrices
+
 ######################
-plot.comp <- read.csv("SpeciesMatrix_Final.csv", row.names=1)
+
+plot.comp <- read.csv("Data/model_inputs/SpeciesMatrix_Final.csv", row.names=1)
 summary(plot.comp)
 plot.comp[1:10, 1:10]
 
-plot.env <- read.csv("Plot_EnvironmentCharacteristics_IVweights.csv")
+plot.env <- read.csv("Data/processed_inputs/Plot_EnvironmentCharacteristics_IVweights.csv")
 summary(plot.env)
 
 ###############################################################################################
@@ -177,7 +188,7 @@ taxa.grouped <- c(quercus, acer, betula, carya, pinaceae)
 species.all <- rownames(nms.plot$species)
 other <- species.all[!(species.all %in% taxa.grouped)] 
 
-pdf("Composition_NMS_EnvFit_p01_NoStrata.pdf", width=10, height=7.5)
+pdf("Figures/Ordination/Composition_NMS_EnvFit_p01_NoStrata.pdf", width=10, height=7.5)
 par(mar=c(5,5,1,1))
 plot <- ordiplot(nms1, type="none", main="", cex.lab=1.5, font.lab=2, cex.axis=1.5, font.axis=1)
 # text(plot, "species", col="black", cex=0.9)
@@ -192,7 +203,7 @@ plot(fit.all3b, p.max=0.01, col="black", cex=1.25, font=2)
 legend("topright", legend=c("Quercus", "Carya", "Acer", "Betula", "Pinaceae", "Other"), pch=c(7,8,9,10,13,1), col=c("red", "orange3", "purple", "blue", "green3", "black"), cex=1.5)
 dev.off()
 
-pdf("Composition_NMS_EnvFit_p01_NoStrata_Text.pdf", width=10, height=7.5)
+pdf("Figures/Ordination/Composition_NMS_EnvFit_p01_NoStrata_Text.pdf", width=10, height=7.5)
 par(mar=c(5,5,1,1))
 plot <- ordiplot(nms1, type="none", main="", cex.lab=1.5, font.lab=2, cex.axis=1.5, font.axis=1)
 # text(plot, "species", col="black", cex=0.9)
@@ -208,7 +219,7 @@ legend("topright", legend=c("Quercus", "Carya", "Acer", "Betula", "Pinaceae", "O
 dev.off()
 
 
-pdf("Composition_NMS_EnvFit_p05_NoStrata.pdf", width=10, height=7.5)
+pdf("Figures/Ordination/Composition_NMS_EnvFit_p05_NoStrata.pdf", width=10, height=7.5)
 par(mar=c(5,5,1,1))
 plot <- ordiplot(nms1, type="none", main="", cex.lab=1.5, font.lab=2, cex.axis=1.5, font.axis=1)
 # text(plot, "species", col="black", cex=0.9)
@@ -224,7 +235,7 @@ legend("topright", legend=c("Quercus", "Carya", "Acer", "Betula", "Pinaceae", "O
 dev.off()
 
 
-pdf("Composition_NMS_EnvFit_p01_Strata.pdf", width=10, height=7.5)
+pdf("Figures/Ordination/Composition_NMS_EnvFit_p01_Strata.pdf", width=10, height=7.5)
 par(mar=c(5,5,1,1))
 plot <- ordiplot(nms1, type="none", main="", cex.lab=1.5, font.lab=2, cex.axis=1.5, font.axis=1)
 # text(plot, "species", col="black", cex=0.9)
@@ -239,7 +250,7 @@ plot(fit.all3, p.max=0.01, col="black", cex=1.25, font=2)
 legend("topright", legend=c("Quercus", "Carya", "Acer", "Betula", "Pinaceae", "Other"), pch=c(7,8,9,10,13,1), col=c("red", "orange3", "purple", "blue", "green3", "black"), cex=1.5)
 dev.off()
 
-pdf("Composition_NMS_EnvFit_p05_Strata.pdf", width=10, height=7.5)
+pdf("Figures/Ordination/Composition_NMS_EnvFit_p05_Strata.pdf", width=10, height=7.5)
 par(mar=c(5,5,1,1))
 plot <- ordiplot(nms1, type="none", main="", cex.lab=1.5, font.lab=2, cex.axis=1.5, font.axis=1)
 # text(plot, "species", col="black", cex=0.9)
@@ -262,18 +273,19 @@ dev.off()
 # Hypothesis: Community composition is different among transects at a site
 # Test: PERMANOVA
 test0 <- adonis(plot.comp ~ Tmean.yr + Tmean.MAM + Tmean.JJA + Tmean.M_S + Precip.yr + Precip.MAM + Precip.JJA + Precip.M_S + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test0 	#Cumulative R2 = 0.64
+test0 	#Cumulative R2 = 0.65
 
 test1 <- adonis(plot.comp ~ Tmean.yr*Precip.yr*ksat*kffact*sieve200, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test1 
+test1 #Cumulative R2 = 0.71
+
 
 # With mean normal annual tem
 test2 <- adonis(plot.comp ~ Tmean.yr + Precip.yr + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test2 	#Cumulative R2 = 0.57
+test2 	#Cumulative R2 = 0.58
 
 
 test3 <- adonis(plot.comp ~ Tmean.yr.norm + Precip.yr.norm + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test3 	#Cumulative R2 = 0.0.67
+test3 	#Cumulative R2 = 0.68
 
 
 

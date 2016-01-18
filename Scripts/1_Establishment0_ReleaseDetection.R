@@ -1,7 +1,8 @@
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
+
+
 # importing libraries
 library(lattice)
-
-# Getting Libraries
 library(reshape)
 library(car)
 library(mgcv)
@@ -25,13 +26,13 @@ large.axes2 <- theme(axis.line=element_line(color="black", size=0.5), panel.grid
 # Reading in & Formatting data
 #################################################################################################
 
-ring.data <- read.csv("Cores_FullData_Final2.csv") 
+ring.data <- read.csv("Data/raw_inputs/Cores_FullData_Final2.csv") 
 ring.data$Plot <- as.factor(ring.data$Plot)
 ring.data$Tree <- as.factor(ring.data$Tree)
 summary(ring.data)
 
 
-cores.bai <- read.csv("Cores_BAI_Measured.csv", row.names=1)
+cores.bai <- read.csv("Data/raw_inputs/Cores_BAI_Measured.csv", row.names=1)
 dim(cores.bai)
 names(cores.bai)
 cores.bai[1:10, 1:10]
@@ -93,28 +94,28 @@ dim(cores.bai)
 release.minor <- lorimer.release(x=cores.bai, r=10, p=15, thresh=0.5)
 summary(release.minor[,1:15])
 # release.minor[,1:5]
-write.csv(release.minor, "Cores_ReleaseEvents_MinorRelease.csv", row.names=T)
+write.csv(release.minor, "Data/processed_inputs/Cores_ReleaseEvents_MinorRelease.csv", row.names=T)
 
 # Calculating major release events
 release.major <- lorimer.release(x=cores.bai, r=10, p=15, thresh=1)
 summary(release.major[,1:20])
 
-write.csv(release.major, "Cores_ReleaseEvents_MajorRelease.csv", row.names=T)
+write.csv(release.major, "Data/processed_inputs/Cores_ReleaseEvents_MajorRelease.csv", row.names=T)
 
 
 ##############################################################################
 # Stacking & Merging Release Data
 ##############################################################################
-cores.bai <- read.csv("Cores_BAI_Measured.csv", row.names=1)
+cores.bai <- read.csv("Data/raw_inputs/Cores_BAI_Measured.csv", row.names=1)
 cores.bai[1:25,1:10]
 
 
-release.minor <- read.csv("Cores_ReleaseEvents_MinorRelease.csv", row.names=1)
+release.minor <- read.csv("Data/processed_inputs/Cores_ReleaseEvents_MinorRelease.csv", row.names=1)
 dim(release.minor)
 release.minor[1:10, 1:11]
 # years <- disturb$Year
 
-release.major <- read.csv("Cores_ReleaseEvents_MajorRelease.csv", row.names=1)
+release.major <- read.csv("Data/processed_inputs/Cores_ReleaseEvents_MajorRelease.csv", row.names=1)
 dim(release.major)
 release.major[1:10, 1:11]
 
@@ -169,7 +170,7 @@ dim(cores.stack2)
 #########################
 # Adding in Strata Info
 #########################
-cores.data <- read.csv("Cores_FullData_Final2.csv")
+cores.data <- read.csv("Data/raw_inputs/Cores_FullData_Final2.csv")
 summary(cores.data)
 
 # Merging in Relative size
@@ -183,12 +184,12 @@ hist(cores.stack3$RelBA)
 cores.stack3$Size <- as.factor(ifelse(cores.stack3$RelBA > 0.75, "Large", "Small"))
 summary(cores.stack3)
 
-write.csv(cores.stack3, "ReleaseEvents_Trees.csv", row.names=F)
+write.csv(cores.stack3, "Data/processed_inputs/ReleaseEvents_Trees.csv", row.names=F)
 
 ##############################################################################
 # Aggregating to the Plot Level
 ##############################################################################
-cores.stack3 <- read.csv("ReleaseEvents_Trees.csv")
+cores.stack3 <- read.csv("Data/processed_inputs/ReleaseEvents_Trees.csv")
 summary(cores.stack3)
 
 #########################
@@ -285,7 +286,7 @@ release.plot3 <- merge(release.plot, release.strata, all.x=T, all.y=F)
 summary(release.plot3)
 dim(release.plot3); dim(release.plot)
 
-write.csv(release.plot3, "ReleaseEvents_Plots.csv", row.names=F)
+write.csv(release.plot3, "Data/processed_inputs/ReleaseEvents_Plots.csv", row.names=F)
 
 #####################
 ggplot(data=release.plot3[release.plot3$Site=="BLD",]) + geom_histogram(aes(x=Year, weight=p.Minor), binwidth=1) + facet_grid(Trans ~ Plot) + large.axes2 + scale_x_continuous(breaks=c(1900,2000))
@@ -324,7 +325,7 @@ release.plot <- release.plot[,c("PlotID", "Site", "Trans", "Plot", "Year", "Size
 summary(release.plot)
 dim(release.plot)
 
-write.csv(release.plot, "ReleaseEvents_Plots_Size.csv", row.names=F)
+write.csv(release.plot, "Data/processed_inputs/ReleaseEvents_Plots_Size.csv", row.names=F)
 
 
 
@@ -356,7 +357,7 @@ ggplot(data=release.plot2[release.plot2$Site=="BLD",]) + geom_histogram(aes(x=Ye
 ##############################################################################
 # Aggregating to the Site Level (mostly for graphing)
 ##############################################################################
-release.plot <- read.csv("ReleaseEvents_Plots.csv")
+release.plot <- read.csv("Data/processed_inputs/ReleaseEvents_Plots.csv")
 release.plot[is.na(release.plot)] <- 0
 summary(release.plot)
 
@@ -370,7 +371,7 @@ ggplot(data=release.site[release.site$p.Major>=0.25,]) + geom_histogram(aes(x=Ye
 
 ggplot(data=release.site) + geom_histogram(aes(x=Year, weight=p.Major), binwidth=1) + facet_grid(Site.NS ~ .) + large.axes2 + scale_x_continuous(breaks=c(1800,1850,1900,1950,2000)) +  scale_y_continuous(name="Percent Trees Meeting Criteria", breaks=c(0,0.15))
 
-pdf("Release_Major_Sites_1990-2011.pdf")
+pdf("Figures/Background/Release_Major_Sites_1990-2011.pdf")
 ggplot(data=release.site) + geom_histogram(aes(x=Year, weight=p.Major*100), binwidth=1) + facet_grid(Site.NS ~ .) + large.axes2 + scale_x_continuous(limits=c(1990,2011), breaks=c(1990, 2000, 2010)) +  scale_y_continuous(name="Percent Trees", limits=c(0,25), breaks=c(0,10, 20)) + ggtitle("Percent Trees Showing Major Release")
 dev.off()
 
@@ -384,7 +385,7 @@ ggplot(data=release.site) + geom_histogram(aes(x=Year, weight=p.Minor.small), bi
 ##############################################################################
 # Smoothing Release Events (to match Estab)
 ##############################################################################
-release.plot <- read.csv("ReleaseEvents_Plots.csv")
+release.plot <- read.csv("Data/processed_inputs/ReleaseEvents_Plots.csv")
 release.plot[is.na(release.plot)] <- 0
 summary(release.plot)
 
@@ -414,7 +415,7 @@ release.smooth$p.Major <- ifelse(is.na(release.smooth$p.Major), 0, release.smoot
 summary(release.smooth)
 summary(release.plot)
 
-write.csv(release.smooth, "ReleaseEvents_Plots_Smooth_5yrWin.csv", row.names=F)
+write.csv(release.smooth, "Data/processed_inputs/ReleaseEvents_Plots_Smooth_5yrWin.csv", row.names=F)
 
 
 ##################################
@@ -476,4 +477,4 @@ dim(release.time)
 hist(release.time$time.Major)
 hist(release.time$time.Minor)
 
-write.csv(release.time, "ReleaseEvents_Plots_Smooth_TimeElapsed.csv", row.names=F)
+write.csv(release.time, "Data/processed_inputs/ReleaseEvents_Plots_Smooth_TimeElapsed.csv", row.names=F)

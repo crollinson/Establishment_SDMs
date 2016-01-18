@@ -1,3 +1,5 @@
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
+
 # clear memory
 rm(list=ls())
 
@@ -21,7 +23,7 @@ se <- function(x){
 	sd(x, na.rm=TRUE) / sqrt((length(!is.na(x))))}
 
 
-group.col <- read.csv("GroupColors.csv")
+group.col <- read.csv("Data/raw_inputs/GroupColors.csv")
 group.col <- group.col[order(group.col$Spp),]
 summary(group.col)
 
@@ -39,7 +41,7 @@ large.axes2 <- theme(axis.line=element_line(color="black", size=0.5), panel.grid
 # estab <- read.csv("Establishment_SpeciesGroup_Plot_Climate_1km.csv")
 #################################################################################################
 #################################################################################################
-estab.smooth <- read.csv("Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv")
+estab.smooth <- read.csv("Data/model_inputs/Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv")
 summary(estab.smooth)
 
 
@@ -60,7 +62,7 @@ ggplot(data=estab.smooth[estab.smooth$Site=="BLD",]) +
 	# theme(legend.position=c(0.93,0.245), legend.text=element_text(size=14), legend.title=element_text(size=16))
 
 # Minor Disturbance
-pdf("Release_Major_smoothed_BlD.pdf")
+pdf("Figures/Background/Release_Major_smoothed_BlD.pdf")
 ggplot(data=estab.smooth[estab.smooth$Site=="BLD",]) + 
 	geom_histogram(aes(x=Year, weight=p.Major/8), binwidth=1, fill="gray75") + 	
 	# geom_line(aes(x=Year, y=p.smooth, color=Spp.Group), size=1) + 	
@@ -71,7 +73,7 @@ ggplot(data=estab.smooth[estab.smooth$Site=="BLD",]) +
 dev.off()
 
 # Major Disturbance
-pdf("Release_Minor_smoothed_BLD.pdf")
+pdf("Figures/Background/Release_Minor_smoothed_BLD.pdf")
 ggplot(data=estab.smooth[estab.smooth$Site=="BLD",]) + 
 	geom_histogram(aes(x=Year, weight=p.Minor/8), binwidth=1, fill="gray75") + 	
 	# geom_line(aes(x=Year, y=p.smooth, color=Spp.Group), size=1) + 	
@@ -99,7 +101,7 @@ colors2 <- group.col2$Color
 ############################
 # Plotting mean establishment per site with Time
 ############################
-pdf("Establishment_1900-2013.pdf", width=11, height=6)
+pdf("Figures/Background/Establishment_1900-2013.pdf", width=11, height=6)
 ggplot(data=estab.site) + 
 	# geom_histogram(aes(x=Year, weight=p.Major*.3), binwidth=1, fill="gray75") + 	
 	geom_line(aes(x=Year, y=p.smooth, color=Spp.Group), size=1) + 	
@@ -112,7 +114,7 @@ dev.off()
 
 
 
-pdf("Establishment_Release_Major_1900-2013.pdf", width=11, height=6)
+pdf("Figures/Background/Establishment_Release_Major_1900-2013.pdf", width=11, height=6)
 ggplot(data=estab.site) + 
 	geom_histogram(aes(x=Year, weight=p.Major*.3), binwidth=1, fill="gray75") + 	
 	geom_line(aes(x=Year, y=p.smooth, color=Spp.Group), size=1) + 	
@@ -123,7 +125,7 @@ ggplot(data=estab.site) +
 	theme(legend.position=c(0.93,0.245), legend.text=element_text(size=10), legend.title=element_text(size=12))
 dev.off()
 
-pdf("Establishment_Release_Minor_1900-2013.pdf", width=11, height=6)
+pdf("Figures/Background/Establishment_Release_Minor_1900-2013.pdf", width=11, height=6)
 ggplot(data=estab.site) + 
 	geom_histogram(aes(x=Year, weight=p.Minor*.3), binwidth=1, fill="gray75") + 	
 	geom_line(aes(x=Year, y=p.smooth, color=Spp.Group), size=1) + 	
@@ -156,7 +158,7 @@ ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 
 ###################
 # Histograms
-pdf("Establishment_Species_Temp.pdf")
+pdf("Figures/Background/Establishment_Species_Temp.pdf")
 ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 	geom_histogram(aes(x=Tmean.yr.smooth, weight=p.smooth, fill=Spp.Group), binwidth=0.1) +
 	facet_grid(Spp.Group ~ .) +
@@ -167,7 +169,7 @@ ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 dev.off()	
 
 
-pdf("Establishment_Species_Precip.pdf")
+pdf("Figures/Background/Establishment_Species_Precip.pdf")
 ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 	geom_histogram(aes(x=Precip.yr.smooth, weight=p.smooth, fill=Spp.Group), binwidth=2) +
 	facet_grid(Spp.Group ~ .) +
@@ -183,7 +185,7 @@ dev.off()
 # Scatter plots
 
 # All Together
-pdf("Establishment_Species_Temp_Precip.pdf")
+pdf("Figures/Background/Establishment_Species_Temp_Precip.pdf")
 ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 	geom_jitter(aes(x=Tmean.yr.smooth, y=Precip.yr.smooth, size=p.smooth, color=Spp.Group), position=position_jitter(width=0.1, height=2), alpha=0.7) +
 	# facet_grid(Spp.Group ~ .) +
@@ -203,7 +205,7 @@ ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
  	large.axes2 + guides(size=F) + 
  	theme(legend.position=c(0.2,0.8))
 
-pdf("Establishment_Species_Temp_Precip_Facet_Site.pdf")
+pdf("Figures/Background/Establishment_Species_Temp_Precip_Facet_Site.pdf")
 ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 	geom_jitter(aes(y=Tmean.yr.smooth, x=Precip.yr.smooth, size=p.smooth, color=Spp.Group), position=position_jitter(width=0.1, height=2), alpha=0.7) +
 	facet_grid(Site.NS ~ .) +
@@ -215,7 +217,7 @@ ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 dev.off()
 
 # Broken into facets by Species
-pdf("Establishment_Species_Temp_Precip_Facet_Species.pdf")
+pdf("Figures/Background/Establishment_Species_Temp_Precip_Facet_Species.pdf")
 ggplot(data=estab.site[estab.site$Spp.Group %in% focal.species,]) +
 	geom_point(aes(x=Tmean.yr.smooth, y=Precip.yr.smooth, size=p.smooth, color=Spp.Group)) +
 	facet_grid(Spp.Group ~ .) +
@@ -229,28 +231,31 @@ dev.off()
 ############################
 # Site Disturbances (Ugly formatting)
 ############################
+release.smooth <- read.csv("Data/processed_inputs/ReleaseEvents_Plots_Smooth_TimeElapsed.csv")
+summary(release.smooth)
 
-pdf("Release_Major_HIK.pdf")
+
+pdf("Figures/Background/Release_Major_HIK.pdf")
 ggplot(data=release.smooth[release.smooth$Site=="HIK",]) + geom_histogram(aes(x=Year, weight=p.Major), binwidth=1) + facet_grid(PlotID ~ .) + large.axes2 + scale_x_continuous(breaks=c(1800,1850,1900,1950,2000)) +  scale_y_continuous(name="Percentage Trees Showing Release")
 dev.off()
 
-pdf("Release_Major_HNK.pdf")
+pdf("Figures/Background/Release_Major_HNK.pdf")
 ggplot(data=release.smooth[release.smooth$Site=="HNK",]) + geom_histogram(aes(x=Year, weight=p.Major), binwidth=1) + facet_grid(PlotID ~ .) + large.axes2 + scale_x_continuous(breaks=c(1800,1850,1900,1950,2000)) +  scale_y_continuous(name="Percentage Trees Showing Release")
 dev.off()
 
-pdf("Release_Major_BLD.pdf")
+pdf("Figures/Background/Release_Major_BLD.pdf")
 ggplot(data=release.smooth[release.smooth$Site=="BLD",]) + geom_histogram(aes(x=Year, weight=p.Major), binwidth=1) + facet_grid(PlotID ~ .) + large.axes2 + scale_x_continuous(breaks=c(1800,1850,1900,1950,2000)) +  scale_y_continuous(name="Percentage Trees Showing Release")
 dev.off()
 
-pdf("Release_Major_MOR.pdf")
+pdf("Figures/Background/Release_Major_MOR.pdf")
 ggplot(data=release.smooth[release.smooth$Site=="MOR",]) + geom_histogram(aes(x=Year, weight=p.Major), binwidth=1) + facet_grid(PlotID ~ .) + large.axes2 + scale_x_continuous(breaks=c(1800,1850,1900,1950,2000)) +  scale_y_continuous(name="Percentage Trees Showing Release")
 dev.off()
 
-pdf("Release_Major_FLT.pdf")
+pdf("Figures/Background/Release_Major_FLT.pdf")
 ggplot(data=release.smooth[release.smooth$Site=="FLT",]) + geom_histogram(aes(x=Year, weight=p.Major), binwidth=1) + facet_grid(PlotID ~ .) + large.axes2 + scale_x_continuous(breaks=c(1800,1850,1900,1950,2000)) +  scale_y_continuous(name="Percentage Trees Showing Release")
 dev.off()
 
-pdf("Release_Major_IRN.pdf")
+pdf("Figures/Background/Release_Major_IRN.pdf")
 ggplot(data=release.smooth[release.smooth$Site=="IRN",]) + geom_histogram(aes(x=Year, weight=p.Major), binwidth=1) + facet_grid(PlotID ~ .) + large.axes2 + scale_x_continuous(breaks=c(1800,1850,1900,1950,2000)) +  scale_y_continuous(name="Percentage Trees Showing Release")
 dev.off()
 
@@ -263,16 +268,16 @@ dev.off()
 #################################################################################################
 # Looking at climate of establishments
 #################################################################################################
-estab.smooth <- read.csv("Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv")
+estab.smooth <- read.csv("Data/model_inputs/Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv")
 summary(estab.smooth)
 
-plot.env <- read.csv("Plot_EnvironmentCharacteristics_IVweights.csv")
+plot.env <- read.csv("Data/processed_inputs/Plot_EnvironmentCharacteristics_IVweights.csv")
 summary(plot.env)
 
 ########################################
 # Establishment vs. all time
 ########################################
-pdf("Establishment_Climate_QURU.pdf")
+pdf("Figures/Background/Establishment_Climate_QURU.pdf")
 ggplot() +
 	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
 	geom_point(data=estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
@@ -281,7 +286,7 @@ ggplot() +
 	large.axes
 dev.off()
 
-pdf("Establishment_Climate_QUPR.pdf")
+pdf("Figures/Background/Establishment_Climate_QUPR.pdf")
 ggplot() +
 	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
 	geom_point(data=estab.smooth[estab.smooth$Spp=="QUPR" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
@@ -290,7 +295,7 @@ ggplot() +
 	large.axes
 dev.off()
 
-pdf("Establishment_Climate_NYSY.pdf")
+pdf("Figures/Background/Establishment_Climate_NYSY.pdf")
 ggplot() +
 	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
 	geom_point(data=estab.smooth[estab.smooth$Spp=="NYSY" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
@@ -300,7 +305,7 @@ ggplot() +
 dev.off()
 
 
-pdf("Establishment_Climate_BELE.pdf")
+pdf("Figures/Background/Establishment_Climate_BELE.pdf")
 ggplot() +
 	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
 	geom_point(data=estab.smooth[estab.smooth$Spp=="BELE" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
@@ -310,7 +315,7 @@ ggplot() +
 dev.off()
 
 
-pdf("Establishment_Climate_ACRU.pdf")
+pdf("Figures/Background/Establishment_Climate_ACRU.pdf")
 ggplot() +
 	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
 	geom_point(data=estab.smooth[estab.smooth$Spp=="ACRU" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
@@ -325,7 +330,7 @@ dev.off()
 ########################################
 # Establishment vs. 30yr Norms
 ########################################
-pdf("Establishment_Climate_QURU.csv")
+pdf("Figures/Background/Establishment_Climate_QURU.csv")
 ggplot() +
 	geom_point(data=plot.env, aes(x=Precip.M_S.norm, y=Tmean.M_S.norm), color="gray50", size=4, shape=19) +
 	geom_point(data=estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +

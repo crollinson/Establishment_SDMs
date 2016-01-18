@@ -1,3 +1,5 @@
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
+
 #################################################################
 # Setting up parameterizations of current forest condition to be compared with establishment models
 #
@@ -16,32 +18,32 @@ large.axes2 <- theme(axis.line=element_line(color="black", size=0.5), panel.grid
 #######################################
 # Data Sets
 #######################################
-spp.list <- read.csv("SppList.csv", na.strings="")
+spp.list <- read.csv("Data/raw_inputs/SppList.csv", na.strings="")
 summary(spp.list)
 
-tree.data <- read.csv("TreeData.csv", na.strings=c("", "*", "#DIV/0!"))
+tree.data <- read.csv("Data/raw_inputs/TreeData.csv", na.strings=c("", "*", "#DIV/0!"))
 summary(tree.data)
 
-estab.data <- read.csv("Establishment_AllCores.csv")
+estab.data <- read.csv("Data/raw_inputs/Establishment_AllCores.csv")
 summary(estab.data)
 
-estab.smooth <- read.csv("Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv")
+estab.smooth <- read.csv("Data/model_inputs/Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv")
 summary(estab.smooth)
 
-climate.1km <- read.csv("CARCA_Plots_Climate_1km_Buffer_Wide.csv")
+climate.1km <- read.csv("Data/processed_inputs/CARCA_Plots_Climate_1km_Buffer_Wide.csv")
 summary(climate.1km) 
 
-soils <- read.csv("CARCA_Plots_SoilsInfo_Final.csv")
+soils <- read.csv("Data/raw_inputs/CARCA_Plots_SoilsInfo_Final.csv")
 summary(soils)
 
-topo <- read.csv("CARCA_Plots_TopoInputs_1km_Buffer.csv")
+topo <- read.csv("Data/raw_inputs/CARCA_Plots_TopoInputs_1km_Buffer.csv")
 summary(topo)
 
-plot.data <- read.csv("PlotData.csv")
+plot.data <- read.csv("Data/raw_inputs/PlotData.csv")
 names(plot.data) <- c("PlotID", "Site.Name", "Site", names(plot.data[,4:ncol(plot.data)]))
 summary(plot.data) 
 
-release.time <- read.csv("ReleaseEvents_Plots_Smooth_TimeElapsed.csv")
+release.time <- read.csv("Data/processed_inputs/ReleaseEvents_Plots_Smooth_TimeElapsed.csv")
 summary(release.time)
 
 ####################################################################################
@@ -67,7 +69,7 @@ spp.cast <- dcast(spp.melt, PlotID ~ Spp)
 spp.cast <- spp.cast[order(spp.cast$PlotID),]
 spp.cast[is.na(spp.cast)] <- 0
 summary(spp.cast)
-write.csv(spp.cast, "SpeciesMatrix_Final.csv", row.names=F)
+write.csv(spp.cast, "Data/model_inputs/SpeciesMatrix_Final.csv", row.names=F)
 
 spp.data <- stack(spp.cast[,2:ncol(spp.cast)])
 names(spp.data) <- c("IV.avg", "Spp")
@@ -238,18 +240,18 @@ summary(estab.plot4)
 dim(estab.plot4); dim(estab.plot3)
 
 
-write.csv(estab.plot4, "CurrentComp_SpeciesGroup_EstabClimate_RF_withNA.csv", row.names=F)
+write.csv(estab.plot4, "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_withNA.csv", row.names=F)
 
 # Removing NA for RF analysis 
 estab.plot4 <- estab.plot4[complete.cases(estab.plot4),]
 
-write.csv(estab.plot4, "CurrentComp_SpeciesGroup_EstabClimate_RF.csv", row.names=F)
+write.csv(estab.plot4, "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF.csv", row.names=F)
 
-write.csv(estab.plot4[estab.plot4$Spp=="QURU",], "CurrentComp_SpeciesGroup_EstabClimate_RF_QURU.csv", row.names=F)
-write.csv(estab.plot4[estab.plot4$Spp=="QUPR",], "CurrentComp_SpeciesGroup_EstabClimate_RF_QUPR.csv", row.names=F)
-write.csv(estab.plot4[estab.plot4$Spp=="NYSY",], "CurrentComp_SpeciesGroup_EstabClimate_RF_NYSY.csv", row.names=F)
-write.csv(estab.plot4[estab.plot4$Spp=="BELE",], "CurrentComp_SpeciesGroup_EstabClimate_RF_BELE.csv", row.names=F)
-write.csv(estab.plot4[estab.plot4$Spp=="ACRU",], "CurrentComp_SpeciesGroup_EstabClimate_RF_ACRU.csv", row.names=F)
+write.csv(estab.plot4[estab.plot4$Spp=="QURU",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_QURU.csv", row.names=F)
+write.csv(estab.plot4[estab.plot4$Spp=="QUPR",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_QUPR.csv", row.names=F)
+write.csv(estab.plot4[estab.plot4$Spp=="NYSY",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NYSY.csv", row.names=F)
+write.csv(estab.plot4[estab.plot4$Spp=="BELE",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_BELE.csv", row.names=F)
+write.csv(estab.plot4[estab.plot4$Spp=="ACRU",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_ACRU.csv", row.names=F)
 
 
 
@@ -276,7 +278,7 @@ summary(plot.norms)
 dim(plot.norms); dim(spp.data); dim(climate.norms)
 
 # Disturbances in 2013
-release.smooth <- read.csv("ReleaseEvents_Plots_Smooth_TimeElapsed.csv")
+release.smooth <- read.csv("Data/processed_inputs/ReleaseEvents_Plots_Smooth_TimeElapsed.csv")
 summary(release.smooth)
 
 release <- release.smooth[release.smooth$Year==2013,]
@@ -300,13 +302,13 @@ plot.norms4 <- merge(plot.norms3, plot.data[,c("PlotID", "live.ba", "dead.ba", "
 summary(plot.norms4)
 dim(plot.norms4); dim(plot.norms3)
 
-write.csv(plot.norms4, "CurrentComp_SpeciesGroup_30ynorms_RF.csv", row.names=F)
+write.csv(plot.norms4, "Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF.csv", row.names=F)
 
-write.csv(plot.norms4[plot.norms4$Spp=="QURU",], "CurrentComp_SpeciesGroup_30ynorms_RF_QURU.csv", row.names=F)
-write.csv(plot.norms4[plot.norms4$Spp=="QUPR",], "CurrentComp_SpeciesGroup_30ynorms_RF_QUPR.csv", row.names=F)
-write.csv(plot.norms4[plot.norms4$Spp=="NYSY",], "CurrentComp_SpeciesGroup_30ynorms_RF_NYSY.csv", row.names=F)
-write.csv(plot.norms4[plot.norms4$Spp=="BELE",], "CurrentComp_SpeciesGroup_30ynorms_RF_BELE.csv", row.names=F)
-write.csv(plot.norms4[plot.norms4$Spp=="ACRU",], "CurrentComp_SpeciesGroup_30ynorms_RF_ACRU.csv", row.names=F)
+write.csv(plot.norms4[plot.norms4$Spp=="QURU",], "Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF_QURU.csv", row.names=F)
+write.csv(plot.norms4[plot.norms4$Spp=="QUPR",], "Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF_QUPR.csv", row.names=F)
+write.csv(plot.norms4[plot.norms4$Spp=="NYSY",], "Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF_NYSY.csv", row.names=F)
+write.csv(plot.norms4[plot.norms4$Spp=="BELE",], "Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF_BELE.csv", row.names=F)
+write.csv(plot.norms4[plot.norms4$Spp=="ACRU",], "Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF_ACRU.csv", row.names=F)
 
 
 
@@ -316,10 +318,10 @@ write.csv(plot.norms4[plot.norms4$Spp=="ACRU",], "CurrentComp_SpeciesGroup_30yno
 # Note: Random Forests won't work with missing data & presence-only (no IV = 0) matrix were too small, so replacing the climate for observations of no establishment with the 30-yr norm
 ####################################################################################
 
-plot.estab <- read.csv("CurrentComp_SpeciesGroup_EstabClimate_RF_withNA.csv")
+plot.estab <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_withNA.csv")
 summary(plot.estab)
 
-plot.norms <- read.csv("CurrentComp_SpeciesGroup_30ynorms_RF.csv")
+plot.norms <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF.csv")
 summary(plot.norms)
 
 dim(plot.estab); dim(plot.norms)
@@ -347,13 +349,13 @@ summary(plot.estab[,1:18])
 
 summary(plot.estab[is.na(),1:20])
 
-write.csv(plot.estab, "CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv", row.names=F)
+write.csv(plot.estab, "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv", row.names=F)
 
-write.csv(plot.estab[plot.estab$Spp=="QURU",], "CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_QURU.csv", row.names=F)
-write.csv(plot.estab[plot.estab$Spp=="QUPR",], "CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_QUPR.csv", row.names=F)
-write.csv(plot.estab[plot.estab$Spp=="NYSY",], "CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_NYSY.csv", row.names=F)
-write.csv(plot.estab[plot.estab$Spp=="BELE",], "CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_BELE.csv", row.names=F)
-write.csv(plot.estab[plot.estab$Spp=="ACRU",], "CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_ACRU.csv", row.names=F)
+write.csv(plot.estab[plot.estab$Spp=="QURU",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_QURU.csv", row.names=F)
+write.csv(plot.estab[plot.estab$Spp=="QUPR",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_QUPR.csv", row.names=F)
+write.csv(plot.estab[plot.estab$Spp=="NYSY",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_NYSY.csv", row.names=F)
+write.csv(plot.estab[plot.estab$Spp=="BELE",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_BELE.csv", row.names=F)
+write.csv(plot.estab[plot.estab$Spp=="ACRU",], "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled_ACRU.csv", row.names=F)
 
 
 
@@ -426,7 +428,7 @@ plot.env5 <- merge(plot.env4, plot.data[,c("PlotID", "live.ba", "dead.ba", "live
 summary(plot.env5)
 dim(plot.env5)
 
-write.csv(plot.env5, "Plot_EnvironmentCharacteristics.csv", row.names=F)
+write.csv(plot.env5, "Data/processed_inputs/Plot_EnvironmentCharacteristics.csv", row.names=F)
 
 
 
@@ -434,7 +436,7 @@ write.csv(plot.env5, "Plot_EnvironmentCharacteristics.csv", row.names=F)
 ####################################################################################
 # Environmental Matrix -- weighted climate
 ####################################################################################
-plot.estab <- read.csv("CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv")
+plot.estab <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv")
 summary(plot.estab)
 names(plot.estab)
 
@@ -466,5 +468,5 @@ plot.env5 <- merge(plot.env4, plot.data[,c("PlotID", "live.ba", "dead.ba", "live
 summary(plot.env5)
 dim(plot.env5)
 
-write.csv(plot.env5, "Plot_EnvironmentCharacteristics_IVweights.csv", row.names=F)
+write.csv(plot.env5, "Data/processed_inputs/Plot_EnvironmentCharacteristics_IVweights.csv", row.names=F)
 

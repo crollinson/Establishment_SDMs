@@ -1,3 +1,5 @@
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
+
 # clear memory
 rm(list=ls())
 
@@ -12,21 +14,21 @@ se <- function(x){
 
 ################################################################################################
 # Reading in and merging data sets
-plot.data <- read.csv("Plot_Data_AllYrs.csv")
+plot.data <- read.csv("Data/raw_inputs/Plot_Data_AllYrs.csv")
 summary(plot.data)
 dim(plot.data)
 
-tree.data <- read.csv("TreeData.csv")
+tree.data <- read.csv("Data/raw_inputs/TreeData.csv")
 summary(tree.data)
 
-estab.cores <- read.csv("Establishment_AllCores.csv")
+estab.cores <- read.csv("Data/raw_inputs/Establishment_AllCores.csv")
 estab.cores$Plot <- as.factor(estab.cores$Plot) 
 estab.cores$Tree <- as.factor(estab.cores$Tree) 
 estab.cores$pith.use <- round(estab.cores$pith.use, digits=0)
 estab.cores <- estab.cores[,c("TreeID", "PlotID", "Site", "Trans", "Plot", "Spp", "Genus", "Canopy", "DBH", "Pith.Yr", "pith.calc", "pith.modeled", "pith.use", "Inner", "Outer", "Bark")]
 summary(estab.cores)
 
-spp.list <- read.csv("SppList.csv", na.strings="")
+spp.list <- read.csv("Data/raw_inputs/SppList.csv", na.strings="")
 summary(spp.list)
 
 # Adding species group to tree info
@@ -66,15 +68,15 @@ for(i in unique(estab.group$Spp.Group)){
 summary(estab.group)
 
 
-write.csv(estab.group, "Establishment_SpeciesGroup_Plot.csv", row.names=F)
+write.csv(estab.group, "Data/processed_inputs/Establishment_SpeciesGroup_Plot.csv", row.names=F)
 
 ################################################################################################
 # Adding in plot-level climate data & soils data
-estab.group <- read.csv("Establishment_SpeciesGroup_Plot.csv")
+estab.group <- read.csv("Data/processed_inputs/Establishment_SpeciesGroup_Plot.csv")
 estab.group$Year <- as.factor(estab.group$Year)
 summary(estab.group)
 
-release <- read.csv("ReleaseEvents_Plots.csv")
+release <- read.csv("Data/processed_inputs/ReleaseEvents_Plots.csv")
 release$Year <- as.factor(release$Year)
 summary(release)
 
@@ -124,7 +126,7 @@ summary(estab.group3)
 ###########################
 # 1 km climate
 ###########################
-climate.1km <- read.csv("CARCA_Plots_Climate_1km_Buffer.csv")
+climate.1km <- read.csv("Data/raw_inputs/CARCA_Plots_Climate_1km_Buffer.csv")
 climate.1km$Year <- as.factor(climate.1km$Year)
 summary(climate.1km)
 
@@ -162,20 +164,20 @@ estab.group4 <- estab.group4[!is.na(estab.group4$Spp.Group),]
 summary(estab.group4)
 
 
-write.csv(estab.group4, "Establishment_SpeciesGroup_Plot_Climate_1km.csv", row.names=F)
+write.csv(estab.group4, "Data/processed_inputs/Establishment_SpeciesGroup_Plot_Climate_1km.csv", row.names=F)
 
 ################################################################################################
 # Adding in Static topogrpahic variables
-estab.group4 <- read.csv("Establishment_SpeciesGroup_Plot_Climate_1km.csv")
+estab.group4 <- read.csv("Data/processed_inputs/Establishment_SpeciesGroup_Plot_Climate_1km.csv")
 summary(estab.group4)
 
-soils <- read.csv("CARCA_Plots_SoilsInfo_Final.csv")
+soils <- read.csv("Data/raw_inputs/CARCA_Plots_SoilsInfo_Final.csv")
 summary(soils)
 
-topo <- read.csv("CARCA_Plots_TopoInputs_1km_Buffer.csv")
+topo <- read.csv("Data/raw_inputs/CARCA_Plots_TopoInputs_1km_Buffer.csv")
 summary(topo)
 
-plot.data <- read.csv("Plot_Data_AllYrs.csv")
+plot.data <- read.csv("Data/raw_inputs/Plot_Data_AllYrs.csv")
 summary(plot.data)
 
 
@@ -192,12 +194,12 @@ summary(estab.group7)
 dim(estab.group7); dim(estab.group6)
 
 
-write.csv(estab.group7, "Establishment_SpeciesGroup_Plot_Climate_1km.csv", row.names=F)
+write.csv(estab.group7, "Data/processed_inputs/Establishment_SpeciesGroup_Plot_Climate_1km.csv", row.names=F)
 
 unique(estab.group7$Year)
 summary(estab.group7$Year)
 ################################################################################################
-estab.group <- read.csv("Establishment_SpeciesGroup_Plot_Climate_1km.csv")
+estab.group <- read.csv("Data/processed_inputs/Establishment_SpeciesGroup_Plot_Climate_1km.csv")
 summary(estab.group)
 
 
@@ -221,19 +223,19 @@ for(y in min(estab.smooth$Year):max(estab.smooth$Year)){
 summary(estab.smooth)
 summary(estab.group)
 
-write.csv(estab.smooth, "Establishment_SpeciesGroup_Plot_Climate_1km_smooth_1900-2013.csv", row.names=F)
+write.csv(estab.smooth, "Data/processed_inputs/Establishment_SpeciesGroup_Plot_Climate_1km_smooth_1900-2013.csv", row.names=F)
 
 ################################################################################################
 # Adding back in disturbance & plot characteristics
 ################################################################################################
-estab.smooth <- read.csv("Establishment_SpeciesGroup_Plot_Climate_1km_smooth_1900-2013.csv")
+estab.smooth <- read.csv("Data/processed_inputs/Establishment_SpeciesGroup_Plot_Climate_1km_smooth_1900-2013.csv")
 summary(estab.smooth)
 
 
 #######################
 # Climate
 #######################
-climate.smooth <- read.csv("CARCA_Plots_Climate_1km_Smooth.csv")
+climate.smooth <- read.csv("Data/processed_inputs/CARCA_Plots_Climate_1km_Smooth.csv")
 summary(climate.smooth)
 
 estab.smooth1 <- merge(estab.smooth, climate.smooth, all.x=T, all.y=T)
@@ -243,7 +245,7 @@ dim(estab.smooth1); dim(estab.smooth); dim(climate.smooth)
 #######################
 # Disturbance
 #######################
-release.smooth <- read.csv("ReleaseEvents_Plots_Smooth_TimeElapsed.csv")
+release.smooth <- read.csv("Data/processed_inputs/ReleaseEvents_Plots_Smooth_TimeElapsed.csv")
 summary(release.smooth)
 
 estab.smooth2 <- merge(estab.smooth1, release.smooth, all.x=T, all.y=F)
@@ -254,13 +256,13 @@ dim(estab.smooth2); dim(estab.smooth2)
 #######################
 # Soils, topography & plot
 #######################
-soils <- read.csv("CARCA_Plots_SoilsInfo_Final.csv")
+soils <- read.csv("Data/raw_inputs/CARCA_Plots_SoilsInfo_Final.csv")
 summary(soils)
 
-topo <- read.csv("CARCA_Plots_TopoInputs_1km_Buffer.csv")
+topo <- read.csv("Data/raw_inputs/CARCA_Plots_TopoInputs_1km_Buffer.csv")
 summary(topo)
 
-plot.data <- read.csv("Plot_Data_AllYrs.csv")
+plot.data <- read.csv("Data/raw_inputs/Plot_Data_AllYrs.csv")
 summary(plot.data)
 
 estab.group5 <- merge(estab.smooth2, soils, all.x=T, all.y=F)
@@ -279,10 +281,10 @@ estab.group7$PlotID.Year <- as.factor(paste(estab.group7$PlotID, estab.group7$Ye
 estab.group7 <- estab.group7[complete.cases(estab.group7),]
 summary(estab.group7) 
 
-write.csv(estab.group7, "Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv", row.names=F)
+write.csv(estab.group7, "Data/model_inputs/Establishment_SpeciesGroup_Climate_1km_smooth_1900-2013_RF.csv", row.names=F)
 
-write.csv(estab.group7[estab.group7$Spp.Group=="QURU",], "Establishment_SpeciesGroup_RF_QURU.csv", row.names=F)
-write.csv(estab.group7[estab.group7$Spp.Group=="QUPR",], "Establishment_SpeciesGroup_RF_QUPR.csv", row.names=F)
-write.csv(estab.group7[estab.group7$Spp.Group=="NYSY",], "Establishment_SpeciesGroup_RF_NYSY.csv", row.names=F)
-write.csv(estab.group7[estab.group7$Spp.Group=="BELE",], "Establishment_SpeciesGroup_RF_BELE.csv", row.names=F)
-write.csv(estab.group7[estab.group7$Spp.Group=="ACRU",], "Establishment_SpeciesGroup_RF_ACRU.csv", row.names=F)
+write.csv(estab.group7[estab.group7$Spp.Group=="QURU",], "Data/model_inputs/Establishment_SpeciesGroup_RF_QURU.csv", row.names=F)
+write.csv(estab.group7[estab.group7$Spp.Group=="QUPR",], "Data/model_inputs/Establishment_SpeciesGroup_RF_QUPR.csv", row.names=F)
+write.csv(estab.group7[estab.group7$Spp.Group=="NYSY",], "Data/model_inputs/Establishment_SpeciesGroup_RF_NYSY.csv", row.names=F)
+write.csv(estab.group7[estab.group7$Spp.Group=="BELE",], "Data/model_inputs/Establishment_SpeciesGroup_RF_BELE.csv", row.names=F)
+write.csv(estab.group7[estab.group7$Spp.Group=="ACRU",], "Data/model_inputs/Establishment_SpeciesGroup_RF_ACRU.csv", row.names=F)

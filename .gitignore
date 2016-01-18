@@ -3,3 +3,7 @@ original/*
 *.Rhistory
 *.history
 *.csv
+
+*.pdf
+Data/*
+Figures/*

@@ -1,8 +1,11 @@
-climate.1km <- read.csv("CARCA_Plots_Climate_1km_Buffer_Wide.csv")
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
+
+
+climate.1km <- read.csv("Data/processed_inputs/CARCA_Plots_Climate_1km_Buffer_Wide.csv")
 summary(climate.1km) 
 
 
-plot.data <- read.csv("PlotData.csv")
+plot.data <- read.csv("Data/raw_inputs/PlotData.csv")
 names(plot.data) <- c("PlotID", "Site.Name", "Site", names(plot.data[,4:ncol(plot.data)]))
 summary(plot.data) 
 
@@ -89,7 +92,7 @@ range(climate.yr.precip[substr(climate.yr.precip$PlotID, 1, 3)=="IRN","Precip.yr
 ################################################################################################
 # Looking at IV-weighted establishment conditions
 ################################################################################################
-distrib.estab <- read.csv("CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv")
+distrib.estab <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv")
 summary(distrib.estab)
 
 species <- c("ACRU", "BELE", "NYSY", "QUPR", "QURU")
@@ -109,7 +112,7 @@ for(i in unique(species)){
 }
 sum.mean
 
-write.csv(sum.mean, "EstablishmentClimates_Species.csv", row.names=F)
+write.csv(sum.mean, "Data/analyses/EstablishmentClimates_Species.csv", row.names=F)
 
 
 # ACRU
@@ -130,7 +133,7 @@ summary(distrib.estab[distrib.estab$Spp=="QURU" & distrib.estab$IV.avg>0,c("Spp"
 ################################################################################################
 # Looking at IV-weighted establishment conditions
 ################################################################################################
-distrib.norm <- read.csv("CurrentComp_SpeciesGroup_30ynorms_RF.csv")
+distrib.norm <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF.csv")
 summary(distrib.norm)
 
 species <- c("ACRU", "BELE", "NYSY", "QUPR", "QURU")
@@ -150,4 +153,4 @@ for(i in unique(species)){
 }
 sum.norm
 
-write.csv(sum.norm, "ClimateNorms_Species.csv", row.names=F)
+write.csv(sum.norm, "Data/analyses/ClimateNorms_Species.csv", row.names=F)

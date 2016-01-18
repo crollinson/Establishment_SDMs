@@ -1,3 +1,5 @@
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
+
 library(reshape2)
 library(ggplot2)
 library(grid)
@@ -6,7 +8,7 @@ library(raster)
 ###########################
 # 1 km climate - Reformatting
 ###########################
-climate.1km <- read.csv("CARCA_Plots_Climate_1km_Buffer.csv")
+climate.1km <- read.csv("Data/raw_inputs/CARCA_Plots_Climate_1km_Buffer.csv") # Generated 
 climate.1km$Year <- as.factor(climate.1km$Year)
 summary(climate.1km)
 
@@ -39,12 +41,12 @@ climate.1km.2$Tmean.M_S <- rowMeans(climate.1km.2[,c("Tmean.X05", "Tmean.X06", "
 climate.1km.2$Precip.M_S <- rowMeans(climate.1km.2[,c("Precip.X05", "Precip.X06", "Precip.X07", "Precip.X08", "Precip.X09")], na.rm=F)
 summary(climate.1km.2)
 
-write.csv(climate.1km.2, "CARCA_Plots_Climate_1km_Buffer_Wide.csv", row.names=F)
+write.csv(climate.1km.2, "Data/processed_inputs/CARCA_Plots_Climate_1km_Buffer_Wide.csv", row.names=F)
 
 
 ################################################################################################
 # Smoothing
-climate.1km.2 <- read.csv("CARCA_Plots_Climate_1km_Buffer_Wide.csv")
+climate.1km.2 <- read.csv("Data/processed_inputs/CARCA_Plots_Climate_1km_Buffer_Wide.csv")
 # climate.1km.2$Year <- as.numeric(paste(climate.1km.2$Year))
 
 climate.1km.2 <- climate.1km.2[complete.cases(climate.1km.2),]
@@ -75,7 +77,7 @@ for(p in unique(climate.smooth$PlotID)){
 }
 }
 summary(climate.smooth)
-write.csv(climate.smooth, "CARCA_Plots_Climate_1km_Smooth.csv", row.names=F)
+write.csv(climate.smooth, "Data/processed_inputs/CARCA_Plots_Climate_1km_Smooth.csv", row.names=F)
 
 
 climate.smooth[climate.smooth$Year==2005,]
@@ -87,7 +89,7 @@ climate.smooth[climate.smooth$Year==2005,]
 large.axes2 <- theme(axis.line=element_line(color="black", size=0.5), panel.grid.major=element_blank(), panel.grid.minor= element_blank(), panel.border= element_blank(), panel.background= element_blank(), axis.text.x=element_text(angle=0, color="black", size=18), axis.text.y=element_text(color="black", size=18), axis.title.x=element_text(face="bold", size=20, vjust=-1),  axis.title.y=element_text(face="bold", size=20, vjust=0.2), plot.margin=unit(c(2,2,2,2), "lines")) + theme(legend.position=c(0.2,0.8), legend.text=element_text(size=20), legend.title=element_text(size=20), legend.background=element_rect(fill="white"), legend.key=element_rect(color="white", fill=NA)) + theme(strip.text=element_text(size=rel(1.25), face="bold"))
 
 
-climate.smooth <- read.csv("CARCA_Plots_Climate_1km_Smooth.csv")
+climate.smooth <- read.csv("Data/processed_inputs/CARCA_Plots_Climate_1km_Smooth.csv")
 summary(climate.smooth)
 
 climate.smooth$Tmean.yr <- round(climate.smooth$Tmean.yr.smooth, digits=1)
@@ -98,7 +100,7 @@ climate2 <- aggregate(climate.smooth[,c("Tmean.yr")], by=list(climate.smooth$Tme
 names(climate2) <- c("Tmean.yr", "Precip.yr", "Frequency")
 summary(climate2)
 
-pdf("ClimateSpace_Establishment.pdf")
+pdf("Figures/Background/ClimateSpace_Establishment.pdf")
 ggplot(data=climate2) + large.axes2 + 
 	geom_tile(aes(x=Precip.yr, y=Tmean.yr, fill=Frequency)) +
 	scale_x_continuous(name="Mean Annual Precip (mm)") +
