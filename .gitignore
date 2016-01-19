@@ -5,5 +5,6 @@ original/*
 *.csv
 
 *.pdf
-Data/*
+Data/*/*.csv
+Data/*/*/*_summ.txt
 Figures/*
