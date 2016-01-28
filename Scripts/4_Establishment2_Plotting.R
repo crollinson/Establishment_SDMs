@@ -279,8 +279,8 @@ summary(plot.env)
 ########################################
 pdf("Figures/Background/Establishment_Climate_QURU.pdf")
 ggplot() +
-	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
-	geom_point(data=estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
+	geom_point(data=estab.smooth, aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="gray50", size=4, shape=19) +
+	geom_point(data=estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0,], aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="black", size=2, shape=19) +
 	scale_x_continuous(name="Growing Season Precip (mm)") +
 	scale_y_continuous(name="Growing Season Temp (C)") +
 	large.axes
@@ -288,8 +288,8 @@ dev.off()
 
 pdf("Figures/Background/Establishment_Climate_QUPR.pdf")
 ggplot() +
-	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
-	geom_point(data=estab.smooth[estab.smooth$Spp=="QUPR" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
+	geom_point(data=estab.smooth, aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="gray50", size=4, shape=19) +
+	geom_point(data=estab.smooth[estab.smooth$Spp=="QUPR" & estab.smooth$p.smooth>0,], aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="black", size=2, shape=19) +
 	scale_x_continuous(name="Growing Season Precip (mm)") +
 	scale_y_continuous(name="Growing Season Temp (C)") +
 	large.axes
@@ -297,8 +297,8 @@ dev.off()
 
 pdf("Figures/Background/Establishment_Climate_NYSY.pdf")
 ggplot() +
-	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
-	geom_point(data=estab.smooth[estab.smooth$Spp=="NYSY" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
+	geom_point(data=estab.smooth, aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="gray50", size=4, shape=19) +
+	geom_point(data=estab.smooth[estab.smooth$Spp=="NYSY" & estab.smooth$p.smooth>0,], aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="black", size=2, shape=19) +
 	scale_x_continuous(name="Growing Season Precip (mm)") +
 	scale_y_continuous(name="Growing Season Temp (C)") +
 	large.axes
@@ -307,8 +307,8 @@ dev.off()
 
 pdf("Figures/Background/Establishment_Climate_BELE.pdf")
 ggplot() +
-	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
-	geom_point(data=estab.smooth[estab.smooth$Spp=="BELE" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
+	geom_point(data=estab.smooth, aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="gray50", size=4, shape=19) +
+	geom_point(data=estab.smooth[estab.smooth$Spp=="BELE" & estab.smooth$p.smooth>0,], aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="black", size=2, shape=19) +
 	scale_x_continuous(name="Growing Season Precip (mm)") +
 	scale_y_continuous(name="Growing Season Temp (C)") +
 	large.axes
@@ -317,8 +317,8 @@ dev.off()
 
 pdf("Figures/Background/Establishment_Climate_ACRU.pdf")
 ggplot() +
-	geom_point(data=estab.smooth, aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="gray50", size=4, shape=19) +
-	geom_point(data=estab.smooth[estab.smooth$Spp=="ACRU" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
+	geom_point(data=estab.smooth, aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="gray50", size=4, shape=19) +
+	geom_point(data=estab.smooth[estab.smooth$Spp=="ACRU" & estab.smooth$p.smooth>0,], aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="black", size=2, shape=19) +
 	scale_x_continuous(name="Growing Season Precip (mm)") +
 	scale_y_continuous(name="Growing Season Temp (C)") +
 	large.axes
@@ -332,15 +332,15 @@ dev.off()
 ########################################
 pdf("Figures/Background/Establishment_Climate_QURU.csv")
 ggplot() +
-	geom_point(data=plot.env, aes(x=Precip.M_S.norm, y=Tmean.M_S.norm), color="gray50", size=4, shape=19) +
-	geom_point(data=estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0,], aes(x=Precip.M_S.smooth, y=Tmean.M_S.smooth), color="black", size=2, shape=19) +
+	geom_point(data=plot.env, aes(x=Precip.yr.norm, y=Tmean.yr.norm), color="gray50", size=4, shape=19) +
+	geom_point(data=estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0,], aes(x=Precip.yr.smooth, y=Tmean.yr.smooth), color="black", size=2, shape=19) +
 	scale_x_continuous(name="Growing Season Precip (mm)") +
 	scale_y_continuous(name="Growing Season Temp (C)") +
 	large.axes
 dev.off()
 
-quru.t.norm <- t.test(plot.env$Tmean.M_S.norm, estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0, "Tmean.M_S.smooth"])
+quru.t.norm <- t.test(plot.env$Tmean.yr.norm, estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0, "Tmean.yr.smooth"])
 quru.t.norm
 
-quru.t.yrs <- t.test(estab.smooth$Tmean.M_S.smooth, estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0, "Tmean.M_S.smooth"])
+quru.t.yrs <- t.test(estab.smooth$Tmean.yr.smooth, estab.smooth[estab.smooth$Spp=="QURU" & estab.smooth$p.smooth>0, "Tmean.yr.smooth"])
 quru.t.yrs

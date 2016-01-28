@@ -116,7 +116,7 @@ dim(estab.data4); dim(estab.data3)
 
 
 
-plot.smooth <- aggregate(estab.smooth[,c("Tmean.yr.smooth", "Tmean.JJA.smooth", "Tmean.MAM.smooth", "Tmean.M_S.smooth", "Precip.yr.smooth", "Precip.JJA.smooth", "Precip.MAM.smooth", "Precip.M_S.smooth", "Release.Minor", "Release.Major", "p.Minor", "p.Major", "time.Minor", "peak.Minor.mag", "peak.Minor.ext", "time.Major", "peak.Major.mag", "peak.Major.ext")], by=list(estab.smooth$PlotID, estab.smooth$Year), FUN=mean, na.rm=T)
+plot.smooth <- aggregate(estab.smooth[,c("Tmean.yr.smooth", "Tmean.JFM.smooth", "Tmean.MAM.smooth", "Tmean.JJA.smooth", "Tmean.SON.smooth", "Precip.yr.smooth", "Precip.JFM.smooth", "Precip.MAM.smooth", "Precip.JJA.smooth", "Precip.SON.smooth", "Release.Minor", "Release.Major", "p.Minor", "p.Major", "time.Minor", "peak.Minor.mag", "peak.Minor.ext", "time.Major", "peak.Major.mag", "peak.Major.ext")], by=list(estab.smooth$PlotID, estab.smooth$Year), FUN=mean, na.rm=T)
 names(plot.smooth) <- c("PlotID", "Year", names(plot.smooth[,3:ncol(plot.smooth)]))
 # plot.smooth$Year <- as.factor(plot.smooth$Year)
 summary(plot.smooth)
@@ -177,22 +177,26 @@ for(s in unique(estab.plot$Spp)){
 	############
 	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Tmean.yr"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Tmean.yr.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
+	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Tmean.JFM"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Tmean.JFM.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
+
 	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Tmean.MAM"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Tmean.MAM.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
 	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Tmean.JJA"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Tmean.JJA.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
-	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Tmean.M_S"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Tmean.M_S.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
+	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Tmean.SON"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Tmean.SON.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
 	############
 	# Precipitation
 	############
 	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Precip.yr"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Precip.yr.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
+	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Precip.JFM"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Precip.JFM.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
+
 	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Precip.MAM"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Precip.MAM.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
 	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Precip.JJA"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Precip.JJA.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
-	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Precip.M_S"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Precip.M_S.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
+	estab.plot[estab.plot$PlotID==p & estab.plot$Spp==s,"Precip.SON"] <- sum(estab6[estab6$PlotID==p & estab6$Spp==s, "Precip.SON.smooth"] * estab6[estab6$PlotID==p & estab6$Spp==s, "IV.avg"]/spp.IV.plot[spp.IV.plot$PlotID==p & spp.IV.plot$Spp==s,"IV.avg"])
 
 	############
 	# Release
@@ -266,7 +270,7 @@ summary(climate.1km.80.10)
 # climate.1km.80.10[climate.1km.80.10$Year==1985,]
 
 # Producing climate normals
-climate.norms <- aggregate(climate.1km.80.10[,c("Tmean.yr", "Tmean.MAM", "Tmean.JJA", "Tmean.M_S", "Precip.yr", "Precip.MAM", "Precip.JJA", "Precip.M_S")], by=list(climate.1km.80.10$PlotID), FUN=mean, na.rm=T)
+climate.norms <- aggregate(climate.1km.80.10[,c("Tmean.yr", "Tmean.JFM", "Tmean.MAM", "Tmean.JJA", "Tmean.SON", "Precip.yr", "Precip.JFM", "Precip.MAM", "Precip.JJA", "Precip.SON")], by=list(climate.1km.80.10$PlotID), FUN=mean, na.rm=T)
 names(climate.norms) <- c("PlotID", paste(names(climate.norms[,2:ncol(climate.norms)]), "norm", sep="."))
 summary(climate.norms)
 length(unique(climate.norms$PlotID))
@@ -315,14 +319,70 @@ write.csv(plot.norms4[plot.norms4$Spp=="ACRU",], "Data/model_inputs/CurrentComp_
 
 ####################################################################################
 # Replacing plot-level NA
-# Note: Random Forests won't work with missing data & presence-only (no IV = 0) matrix were too small, so replacing the climate for observations of no establishment with the 30-yr norm
+# Random Forests won't work with missing data & presence-only (no IV = 0) matrix 
+#   were too small, so we need to put something in there.  
+#
+# NA Fill Method: Climate from mean time of establishment of that species hierarchicaly
+#   through the site.  First fill from mean species establishment in the transect and 
+#   then the site.
+#   -- This assumes similar timing/behavior across the site & doesn't screw species like 
+#      BELE up that might come in in a slight gap after everything else
+#   ** If the species is missing at an entire site (BELE), fill with the MEDIAN establishment
+#      for the PLOT
 ####################################################################################
-
+# Load plot RF data
 plot.estab <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_withNA.csv")
 summary(plot.estab)
+summary(plot.estab[,1:18])
 
-plot.norms <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF.csv")
-summary(plot.norms)
+# Looking at some stats for what we're going to gapfill 
+summary(plot.estab[plot.estab$Spp %in% c("ACRU", "BELE", "NYSY", "QUPR", "QURU") & plot.estab$IV.avg==0, c("Site", "PlotID", "Spp", "IV.avg", "IV.avg.dated")])
+summary(plot.estab[plot.estab$Spp %in% c("BELE") & plot.estab$IV.avg==0, c("Site", "PlotID", "Spp", "IV.avg", "IV.avg.dated")])
+
+# -------------------------------------
+# Find mean year of stand establishment
+# -------------------------------------
+cores.estab <- read.csv("Data/raw_inputs/Establishment_AllCores.csv")
+summary(cores.estab)
+
+# Getting mean & 95% CI for each year
+# by transect & species
+
+estab.spp.trans <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Trans", "Spp")]), FUN=median)
+names(estab.spp.trans) <- c("Site", "Trans", "Spp", "med.estab")
+estab.spp.trans$ci.lo <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Trans", "Spp")]), FUN=quantile, 0.025)[,4]
+estab.spp.trans$ci.hi <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Trans", "Spp")]), FUN=quantile, 0.975)[,4]
+estab.spp.trans$n <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Trans", "Spp")]), FUN=length)[,4]
+estab.spp.trans$Site.trans <- as.factor(paste0(estab.spp.trans$Site, estab.spp.trans$Trans))
+
+summary(estab.spp.trans)
+# estab.spp.trans[estab.spp.trans$Spp %in% c("ACRU", "BELE", "NYSY", "QUPR", "QURU"),]
+
+# by site & species
+estab.spp.site <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Spp")]), FUN=median)
+names(estab.spp.site) <- c("Site", "Spp", "med.estab")
+estab.spp.site$ci.lo <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Spp")]), FUN=quantile, 0.025)[,3]
+estab.spp.site$ci.hi <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Spp")]), FUN=quantile, 0.975)[,3]
+estab.spp.site$n <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "Spp")]), FUN=length)[,3]
+
+summary(estab.spp.site)
+estab.spp.site[estab.spp.site$Spp %in% c("ACRU", "BELE", "NYSY", "QUPR", "QURU"),]
+
+
+# by plot
+estab.cores.plot <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "PlotID")]), FUN=median)
+names(estab.cores.plot) <- c("Site", "PlotID", "med.estab")
+estab.cores.plot$ci.lo <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "PlotID")]), FUN=quantile, 0.025)[,3]
+estab.cores.plot$ci.hi <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "PlotID")]), FUN=quantile, 0.975)[,3]
+estab.cores.plot$n <- aggregate(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),"pith.use"], by=c(cores.estab[cores.estab$pith.use>min(plot.smooth$Year),c("Site", "PlotID")]), FUN=length)[,3]
+
+summary(estab.cores.plot)
+estab.cores.plot[estab.cores.plot$Site %in% c("FLT"),]
+# -------------------------------------
+
+# plot.norms <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF.csv")
+# summary(plot.norms)
+summary(plot.smooth)
 
 dim(plot.estab); dim(plot.norms)
 names(plot.estab); names(plot.norms)
@@ -330,24 +390,33 @@ names(plot.estab); names(plot.norms)
 
 summary(plot.estab[,1:18])
 
+climate.vars <- c("Tmean.yr", "Tmean.JFM", "Tmean.MAM", "Tmean.JJA", "Tmean.SON", "Precip.yr", "Precip.JFM", "Precip.MAM", "Precip.JJA", "Precip.SON")
+disturb.vars <- c("time.Minor", "peak.Minor.mag", "peak.Minor.ext", "time.Major", "peak.Major.mag", "peak.Major.ext")
+
 for(p in unique(plot.estab$PlotID)){
-for(s in unique(plot.estab$Spp)){
-	#########################
-	# Replacing missing temp & precip with 30-yr norms (columns 5-12)
-	#########################
-	for(j in colnames(plot.estab[,5:12])){
-	plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, j] <- ifelse(is.na(plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, j]), plot.norms[plot.norms$PlotID==p & plot.norms$Spp==s, paste(j, "norm", sep=".")], plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, j])
+	for(s in unique(plot.estab$Spp)){
+		#########################
+		# Replacing missing temp & precip with 30-yr norms (columns 5-12)
+		#########################
+		# Important: Only do if Tmean, etc is missing
+		if(is.na(min(plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, c(climate.vars, disturb.vars)]))){
+
+		if(nrow(estab.spp.trans[estab.spp.trans$Site.trans==substr(p,1,4) & estab.spp.trans$Spp==s,])>0){
+			# if that species exists elsewhere in the transect, use that median
+			yr.use <- round(estab.spp.trans[estab.spp.trans$Site.trans==substr(p,1,4) & estab.spp.trans$Spp==s,"med.estab"], 0)
+		} else if(nrow(estab.spp.site[estab.spp.site$Site==substr(p,1,3) & estab.spp.site$Spp==s,])>0){
+			yr.use <- round(estab.spp.site[estab.spp.site$Site==substr(p,1,3) & estab.spp.site$Spp==s,"med.estab"], 0)		
+		} else {
+			yr.use <- round(estab.cores.plot[estab.cores.plot$PlotID==p,"med.estab"], 0)		
 		}
-	#########################
-	# Replacing missing disturb with 2013 conditions (columns 13-18)
-	#########################
-	for(j in colnames(plot.estab[,13:18])){
-	plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, j] <- ifelse(is.na(plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, j]), plot.norms[plot.norms$PlotID==p & plot.norms$Spp==s, j], plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, j])
+		# Do the actual overwriting
+		plot.estab[plot.estab$PlotID==p & plot.estab$Spp==s, c(climate.vars, disturb.vars)] <- plot.smooth	[plot.smooth$PlotID==p & plot.smooth$Year==yr.use,c(paste0(climate.vars, ".smooth"), disturb.vars)]
 		}
-}}
+	}
+}
 summary(plot.estab[,1:18])
 
-summary(plot.estab[is.na(),1:20])
+# summary(plot.estab[is.na(),1:20])
 
 write.csv(plot.estab, "Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv", row.names=F)
 
@@ -447,12 +516,11 @@ summary(IV.total)
 plot.env1 <- IV.total
 
 for(p in unique(plot.env1$PlotID)){
-	for(j in names(plot.estab[,5:18])){	
-		plot.env1[plot.env1$PlotID==p, j] <- sum(plot.estab[plot.estab$PlotID==p,j]*(plot.estab[plot.estab$PlotID==p, "IV.avg"]/plot.env1[plot.env1$PlotID==p, "IV.total"]))
+	for(v in c(climate.vars, disturb.vars)){
+	plot.env1[plot.env1$PlotID==p, v] <- sum(plot.estab[plot.estab$PlotID==p,v]*(plot.estab[plot.estab$PlotID==p, "IV.avg"]/plot.env1[plot.env1$PlotID==p, "IV.total"]))
 	}
-	}
+}
 summary(plot.env1)	
-summary(plot.estab[,5:18])
 
 plot.env2 <- merge(plot.env1, climate.norms, all.x=T, all.y=T)
 summary(plot.env2)

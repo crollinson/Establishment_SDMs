@@ -96,7 +96,7 @@ distrib.estab <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_EstabClima
 summary(distrib.estab)
 
 species <- c("ACRU", "BELE", "NYSY", "QUPR", "QURU")
-var.cols <- c("IV.avg", "Precip.yr", "Precip.M_S", "Precip.MAM", "Tmean.M_S", "Tmean.MAM", "Tmean.JJA", "BD", "elev", "TPI")
+var.cols <- c("IV.avg", "Precip.yr", "Precip.JFM", "Precip.MAM", "Precip.JJA", "Precip.SON", "Tmean.yr", "Tmean.JFM", "Tmean.MAM", "Tmean.JJA", "Tmean.SON", "BD", "elev", "TPI")
 
 sum.mean <- as.data.frame(species)
 summary(sum.mean)
@@ -116,19 +116,19 @@ write.csv(sum.mean, "Data/analyses/EstablishmentClimates_Species.csv", row.names
 
 
 # ACRU
-summary(distrib.estab[distrib.estab$Spp=="ACRU" & distrib.estab$IV.avg>0,c("Spp", "IV.avg", "Precip.yr", "Precip.M_S", "Precip.MAM", "Tmean.M_S", "Tmean.MAM", "Tmean.JJA", "BD", "elev", "TPI")])
+summary(distrib.estab[distrib.estab$Spp=="ACRU" & distrib.estab$IV.avg>0,c("Spp", var.cols)])
 
 # BELE
-summary(distrib.estab[distrib.estab$Spp=="BELE" & distrib.estab$IV.avg>0,c("Spp", "IV.avg", "Precip.yr", "Precip.M_S", "Precip.MAM", "Tmean.M_S", "Tmean.MAM", "Tmean.JJA", "BD", "elev", "TPI")])
+summary(distrib.estab[distrib.estab$Spp=="BELE" & distrib.estab$IV.avg>0,c("Spp", var.cols)])
 
 # NYSY
-summary(distrib.estab[distrib.estab$Spp=="NYSY" & distrib.estab$IV.avg>0,c("Spp", "IV.avg", "Precip.yr", "Precip.M_S", "Precip.MAM", "Tmean.M_S", "Tmean.MAM", "Tmean.JJA", "BD", "elev", "TPI")])
+summary(distrib.estab[distrib.estab$Spp=="NYSY" & distrib.estab$IV.avg>0,c("Spp", var.cols)])
 
 # QUPR
-summary(distrib.estab[distrib.estab$Spp=="QUPR" & distrib.estab$IV.avg>0,c("Spp", "IV.avg", "Precip.yr", "Precip.M_S", "Precip.MAM", "Tmean.M_S", "Tmean.MAM", "Tmean.JJA", "BD", "elev", "TPI")])
+summary(distrib.estab[distrib.estab$Spp=="QUPR" & distrib.estab$IV.avg>0,c("Spp", var.cols)])
 
 # QURU
-summary(distrib.estab[distrib.estab$Spp=="QURU" & distrib.estab$IV.avg>0,c("Spp", "IV.avg", "Precip.yr", "Precip.M_S", "Precip.MAM", "Tmean.M_S", "Tmean.MAM", "Tmean.JJA", "BD", "elev", "TPI")])
+summary(distrib.estab[distrib.estab$Spp=="QURU" & distrib.estab$IV.avg>0,c("Spp", var.cols)])
 
 ################################################################################################
 # Looking at IV-weighted establishment conditions
@@ -137,7 +137,7 @@ distrib.norm <- read.csv("Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF
 summary(distrib.norm)
 
 species <- c("ACRU", "BELE", "NYSY", "QUPR", "QURU")
-var.cols2 <- c("IV.avg", "Precip.yr.norm", "Precip.M_S.norm", "Precip.MAM.norm", "Tmean.M_S.norm", "Tmean.MAM.norm", "Tmean.JJA.norm", "BD", "elev", "TPI")
+var.cols2 <- c("IV.avg", "Precip.yr.norm", "Precip.JFM.norm", "Precip.MAM.norm", "Precip.JJA.norm", "Precip.SON.norm", "Tmean.yr.norm", "Tmean.JFM.norm", "Tmean.MAM.norm", "Tmean.JJA.norm", "Tmean.SON.norm", "BD", "elev", "TPI")
 
 sum.norm <- as.data.frame(species)
 summary(sum.norm)
@@ -147,8 +147,8 @@ length(distrib.estab[distrib.estab$Spp=="ACRU" & distrib.estab$IV.avg>0,"Spp"])
 
 for(i in unique(species)){
 	for(j in unique(var.cols2)){
-		sum.norm[sum.norm$species==i,"n.plots"] <- length(distrib.norm[distrib.norm$Spp==i,"Spp"])
-		sum.norm[sum.norm$species==i, j] <- paste(round(mean(distrib.norm[distrib.norm$Spp==i,j]), digits=1), " (", round(sd(distrib.norm[distrib.norm$Spp==i,j]), digits=2), ")", sep="")
+		sum.norm[sum.norm$species==i,"n.plots"] <- length(distrib.norm[distrib.norm$Spp==i & distrib.norm$IV.avg>0,"Spp"])
+		sum.norm[sum.norm$species==i, j] <- paste(round(mean(distrib.norm[distrib.norm$Spp==i & distrib.norm$IV.avg>0,j]), digits=1), " (", round(sd(distrib.norm[distrib.norm$Spp==i & distrib.norm$IV.avg>0,j]), digits=2), ")", sep="")
 	}
 }
 sum.norm

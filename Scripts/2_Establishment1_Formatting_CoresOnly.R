@@ -126,40 +126,14 @@ summary(estab.group3)
 ###########################
 # 1 km climate
 ###########################
-climate.1km <- read.csv("Data/raw_inputs/CARCA_Plots_Climate_1km_Buffer.csv")
+climate.1km <- read.csv("Data/processed_inputs/CARCA_Plots_Climate_1km_Buffer_Wide.csv")
 climate.1km$Year <- as.factor(climate.1km$Year)
 summary(climate.1km)
 
-climate.melt <- melt(climate.1km[,c("PlotID", "Year", "Month", "Tavg", "Precip.PRISM")])
-summary(climate.melt)
-
-# Separating out Monthly Temperatures
-temp.1km <- dcast(climate.melt[climate.melt$variable=="Tavg",], PlotID + Year ~ Month)
-names(temp.1km) <- c("PlotID", "Year", paste("Tmean", names(temp.1km[,3:ncol(temp.1km)]), sep="."))
-summary(temp.1km)
-
-# Separating out Monthly Precip
-precip.1km <- dcast(climate.melt[climate.melt$variable=="Precip.PRISM",], PlotID + Year ~ Month)
-names(precip.1km) <- c("PlotID", "Year", paste("Precip", names(precip.1km[,3:ncol(precip.1km)]), sep="."))
-summary(precip.1km)
-
-# Making 1 "wide" formate climate
-climate.1km.2 <- merge(temp.1km, precip.1km, all.x=T, all.y=T)
-climate.1km.2$Tmean.yr <- rowMeans(climate.1km.2[,substr(names(climate.1km.2),1,5)=="Tmean"], na.rm=F)
-climate.1km.2$Precip.yr <- rowMeans(climate.1km.2[,substr(names(climate.1km.2),1,6)=="Precip"], na.rm=F)
-climate.1km.2$Tmean.JJA <- rowMeans(climate.1km.2[,c("Tmean.X06", "Tmean.X07", "Tmean.X08")], na.rm=F)
-climate.1km.2$Tmean.MAM <- rowMeans(climate.1km.2[,c("Tmean.X03", "Tmean.X04", "Tmean.X05")], na.rm=F)
-climate.1km.2$Precip.JJA <- rowMeans(climate.1km.2[,c("Precip.X06", "Precip.X07", "Precip.X08")], na.rm=F)
-climate.1km.2$Precip.MAM <- rowMeans(climate.1km.2[,c("Precip.X03", "Precip.X04", "Precip.X05")], na.rm=F)
-climate.1km.2$Tmean.JJA <- rowMeans(climate.1km.2[,c("Tmean.X06", "Tmean.X07", "Tmean.X08")], na.rm=F)
-climate.1km.2$Tmean.M_S <- rowMeans(climate.1km.2[,c("Tmean.X05", "Tmean.X06", "Tmean.X07", "Tmean.X08", "Tmean.X09")], na.rm=F)
-climate.1km.2$Precip.M_S <- rowMeans(climate.1km.2[,c("Precip.X05", "Precip.X06", "Precip.X07", "Precip.X08", "Precip.X09")], na.rm=F)
-summary(climate.1km.2)
-
-length(unique(estab.group$PlotID)); length(unique(climate.1km.2$PlotID))
+length(unique(estab.group$PlotID)); length(unique(climate.1km$PlotID))
 
 # Merging in establishment
-estab.group4 <- merge(estab.group3, climate.1km.2, all.x=T, all.y=T)
+estab.group4 <- merge(estab.group3, climate.1km, all.x=T, all.y=T)
 estab.group4 <- estab.group4[!is.na(estab.group4$Spp.Group),]
 summary(estab.group4)
 

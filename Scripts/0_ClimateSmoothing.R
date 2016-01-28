@@ -32,13 +32,16 @@ summary(precip.1km)
 climate.1km.2 <- merge(temp.1km, precip.1km, all.x=T, all.y=T)
 climate.1km.2$Tmean.yr <- rowMeans(climate.1km.2[,substr(names(climate.1km.2),1,5)=="Tmean"], na.rm=F)
 climate.1km.2$Precip.yr <- rowMeans(climate.1km.2[,substr(names(climate.1km.2),1,6)=="Precip"], na.rm=F)
-climate.1km.2$Tmean.JJA <- rowMeans(climate.1km.2[,c("Tmean.X06", "Tmean.X07", "Tmean.X08")], na.rm=F)
+climate.1km.2$Tmean.JFM <- rowMeans(climate.1km.2[,c("Tmean.X01", "Tmean.X02", "Tmean.X03")], na.rm=F)
 climate.1km.2$Tmean.MAM <- rowMeans(climate.1km.2[,c("Tmean.X03", "Tmean.X04", "Tmean.X05")], na.rm=F)
-climate.1km.2$Precip.JJA <- rowMeans(climate.1km.2[,c("Precip.X06", "Precip.X07", "Precip.X08")], na.rm=F)
-climate.1km.2$Precip.MAM <- rowMeans(climate.1km.2[,c("Precip.X03", "Precip.X04", "Precip.X05")], na.rm=F)
 climate.1km.2$Tmean.JJA <- rowMeans(climate.1km.2[,c("Tmean.X06", "Tmean.X07", "Tmean.X08")], na.rm=F)
-climate.1km.2$Tmean.M_S <- rowMeans(climate.1km.2[,c("Tmean.X05", "Tmean.X06", "Tmean.X07", "Tmean.X08", "Tmean.X09")], na.rm=F)
-climate.1km.2$Precip.M_S <- rowMeans(climate.1km.2[,c("Precip.X05", "Precip.X06", "Precip.X07", "Precip.X08", "Precip.X09")], na.rm=F)
+climate.1km.2$Tmean.SON <- rowMeans(climate.1km.2[,c("Tmean.X09", "Tmean.X10", "Tmean.X11")], na.rm=F)
+
+climate.1km.2$Precip.JFM <- rowMeans(climate.1km.2[,c("Precip.X01", "Precip.X02", "Precip.X03")], na.rm=F)
+climate.1km.2$Precip.MAM <- rowMeans(climate.1km.2[,c("Precip.X03", "Precip.X04", "Precip.X05")], na.rm=F)
+climate.1km.2$Precip.JJA <- rowMeans(climate.1km.2[,c("Precip.X06", "Precip.X07", "Precip.X08")], na.rm=F)
+climate.1km.2$Precip.SON <- rowMeans(climate.1km.2[,c("Precip.X09", "Precip.X10", "Precip.X11")], na.rm=F)
+
 summary(climate.1km.2)
 
 write.csv(climate.1km.2, "Data/processed_inputs/CARCA_Plots_Climate_1km_Buffer_Wide.csv", row.names=F)
@@ -63,17 +66,19 @@ for(p in unique(climate.smooth$PlotID)){
 	for(y in min(climate.smooth$Year):max(climate.smooth$Year)){
 	# Temperature
 	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Tmean.yr.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Tmean.yr"], na.rm=F)
+	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Tmean.JFM.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Tmean.JFM"], na.rm=F)
 	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Tmean.MAM.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Tmean.MAM"], na.rm=F)
 	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Tmean.JJA.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Tmean.JJA"], na.rm=F)
-	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Tmean.M_S.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Tmean.M_S"], na.rm=F)
+	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Tmean.SON.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Tmean.SON"], na.rm=F)
 
 
 
 	# Precip
 	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Precip.yr.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Precip.yr"], na.rm=F)
+	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Precip.JFM.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Precip.JFM"], na.rm=F)
 	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Precip.MAM.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Precip.MAM"], na.rm=F)
 	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Precip.JJA.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Precip.JJA"], na.rm=F)
-	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Precip.M_S.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Precip.M_S"], na.rm=F)
+	climate.smooth[climate.smooth$PlotID==p & climate.smooth$Year==y,"Precip.SON.smooth"] <- mean(data.plot[data.plot$Year>=(y-5) & data.plot$Year<=(y+5),"Precip.SON"], na.rm=F)
 }
 }
 summary(climate.smooth)

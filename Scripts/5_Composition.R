@@ -156,21 +156,19 @@ summary(plot.env)
 # fit.all1 
 
 # Env Fit with all variables; including normals vs. weighted climate
-fit.all2 <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.yr.norm + Tmean.MAM + Tmean.MAM.norm + Tmean.JJA + Tmean.JJA.norm + Tmean.M_S + Tmean.M_S.norm + Precip.yr + Precip.yr.norm + Precip.MAM + Precip.MAM.norm + Precip.JJA + Precip.JJA.norm + Precip.M_S + Precip.M_S.norm + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, strata=plot.env$Site, perm=2e4, na.rm=TRUE)
+fit.all2 <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.yr.norm + Tmean.JFM + Tmean.JFM.norm + Tmean.MAM + Tmean.MAM.norm + Tmean.JJA + Tmean.JJA.norm + Tmean.SON + Tmean.SON.norm + Precip.yr + Precip.yr.norm + Precip.JFM + Precip.JFM.norm + Precip.MAM + Precip.MAM.norm + Precip.JJA + Precip.JJA.norm + Precip.SON + Precip.SON.norm + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, strata=plot.env$Site, perm=2e4, na.rm=TRUE)
 fit.all2 
 
-
-
 # Trying again removing the strata term
-fit.all2b <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.yr.norm + Tmean.MAM + Tmean.MAM.norm + Tmean.JJA + Tmean.JJA.norm + Tmean.M_S + Tmean.M_S.norm + Precip.yr + Precip.yr.norm + Precip.MAM + Precip.MAM.norm + Precip.JJA + Precip.JJA.norm + Precip.M_S + Precip.M_S.norm + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, perm=2e4, na.rm=TRUE)
+fit.all2b <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.yr.norm + Tmean.JFM + Tmean.JFM.norm + Tmean.MAM + Tmean.MAM.norm + Tmean.JJA + Tmean.JJA.norm + Tmean.SON + Tmean.SON.norm + Precip.yr + Precip.yr.norm + Precip.JFM + Precip.JFM.norm + Precip.MAM + Precip.MAM.norm + Precip.JJA + Precip.JJA.norm + Precip.SON + Precip.SON.norm + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, perm=2e4, na.rm=TRUE)
 fit.all2b 
 
 # Re-fitting while removing climate norms
-fit.all3 <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.MAM + Tmean.JJA + Tmean.M_S + Precip.yr + Precip.MAM + Precip.JJA + + Precip.M_S + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, strata=plot.env$Site, perm=2e4, na.rm=TRUE)
+fit.all3 <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.JFM  + Tmean.MAM + Tmean.JJA + Tmean.SON + Precip.yr + Precip.JFM + Precip.MAM + Precip.JJA + Precip.SON + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, strata=plot.env$Site, perm=2e4, na.rm=TRUE)
 fit.all3 
 
 # Re-fitting while removing climate norms & strata
-fit.all3b <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.MAM + Tmean.JJA + Tmean.M_S + Precip.yr + Precip.MAM + Precip.JJA + + Precip.M_S + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, perm=2e4, na.rm=TRUE)
+fit.all3b <- envfit(nms1 ~ time.Minor + peak.Minor.mag + peak.Minor.ext + time.Major + peak.Major.mag + peak.Major.ext + Tmean.yr + Tmean.JFM  + Tmean.MAM + Tmean.JJA + Tmean.SON + Precip.yr + Precip.JFM + Precip.MAM + Precip.JJA + Precip.SON + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, data=plot.env, perm=2e4, na.rm=TRUE)
 fit.all3b 
 
 
@@ -272,20 +270,34 @@ dev.off()
 ######################
 # Hypothesis: Community composition is different among transects at a site
 # Test: PERMANOVA
-test0 <- adonis(plot.comp ~ Tmean.yr + Tmean.MAM + Tmean.JJA + Tmean.M_S + Precip.yr + Precip.MAM + Precip.JJA + Precip.M_S + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test0 	#Cumulative R2 = 0.65
+test0 <- adonis(plot.comp ~ Tmean.yr + Tmean.JFM + Tmean.MAM + Tmean.JJA + Tmean.SON + Precip.yr + Precip.JFM + Precip.MAM + Precip.JJA + Precip.SON + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
+test0 	#Cumulative R2 = 0.675
 
+# Removing the annual means
+test0b <- adonis(plot.comp ~ Tmean.JFM + Tmean.MAM + Tmean.JJA + Tmean.SON + Precip.JFM + Precip.MAM + Precip.JJA + Precip.SON + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
+test0b 	#Cumulative R2 = 0.65
+
+# Changing the order to be a bit more hierarchical
+test0c <- adonis(plot.comp ~ aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope + Tmean.JFM + Precip.JFM + Tmean.MAM + Precip.MAM + Tmean.JJA + Precip.JJA + Tmean.SON + Precip.SON , strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
+test0c 	#Cumulative R2 = 0.65
+
+
+# Looking at some interactions (need to re-select factors based on above)
 test1 <- adonis(plot.comp ~ Tmean.yr*Precip.yr*ksat*kffact*sieve200, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test1 #Cumulative R2 = 0.71
+test1 #Cumulative R2 = 0.79
+
+# comparing norms to the establishment climates
+test1b <- adonis(plot.comp ~ Tmean.yr.norm*Precip.yr.norm*ksat*kffact*sieve200, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
+test1b #Cumulative R2 = 0.65
 
 
 # With mean normal annual tem
 test2 <- adonis(plot.comp ~ Tmean.yr + Precip.yr + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test2 	#Cumulative R2 = 0.58
+test2 	#Cumulative R2 = 0.584
 
 
 test3 <- adonis(plot.comp ~ Tmean.yr.norm + Precip.yr.norm + aws.0150 + brock.dep.min + Utisols + Inceptisols + ksat + pH + kffact + BD + clay + sieve10 + sieve200 + om + elev + flow + TPI + slope, strata=plot.env$Site, data=plot.env, method = "bray", perm=5e4)
-test3 	#Cumulative R2 = 0.68
+test3 	#Cumulative R2 = 0.579
 
 
 
