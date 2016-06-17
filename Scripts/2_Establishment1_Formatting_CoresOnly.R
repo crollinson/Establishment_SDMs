@@ -14,13 +14,16 @@ se <- function(x){
 
 ################################################################################################
 # Reading in and merging data sets
+# Plot Basal Area & Density reconstructiosn
 plot.data <- read.csv("Data/raw_inputs/Plot_Data_AllYrs.csv")
 summary(plot.data)
 dim(plot.data)
 
+# Tree Metadata (DBH, Density, IV)
 tree.data <- read.csv("Data/raw_inputs/TreeData.csv")
 summary(tree.data)
 
+# Tree Establishment dates
 estab.cores <- read.csv("Data/raw_inputs/Establishment_AllCores.csv")
 estab.cores$Plot <- as.factor(estab.cores$Plot) 
 estab.cores$Tree <- as.factor(estab.cores$Tree) 
@@ -28,7 +31,9 @@ estab.cores$pith.use <- round(estab.cores$pith.use, digits=0)
 estab.cores <- estab.cores[,c("TreeID", "PlotID", "Site", "Trans", "Plot", "Spp", "Genus", "Canopy", "DBH", "Pith.Yr", "pith.calc", "pith.modeled", "pith.use", "Inner", "Outer", "Bark")]
 summary(estab.cores)
 
+# Species metadata
 spp.list <- read.csv("Data/raw_inputs/SppList.csv", na.strings="")
+spp.list$Spp.Group <- as.factor(ifelse(spp.list$Spp.Group %in% c("ACRU", "QURU", "QUPR", "NYSY"), paste(spp.list$Spp.Group), "Other"))
 summary(spp.list)
 
 # Adding species group to tree info
@@ -177,10 +182,11 @@ estab.group <- read.csv("Data/processed_inputs/Establishment_SpeciesGroup_Plot_C
 summary(estab.group)
 
 
+# Only looking at post-1900 establishment
 estab.smooth <- estab.group[estab.group$Year>=1900,c("PlotID", "Site", "Spp.Group", "Year")]
 summary(estab.smooth)
 
-print(Sys.time())
+start.smooth <- Sys.time()
 # Smoothing Establishment
 for(p in unique(estab.smooth$PlotID)){
 	data.plot <- estab.group[estab.group$PlotID==p,]
@@ -194,8 +200,12 @@ for(y in min(estab.smooth$Year):max(estab.smooth$Year)){
 }
 }
 }
+end.smooth <- Sys.time()
 summary(estab.smooth)
 summary(estab.group)
+
+start.smooth
+end.smooth
 
 write.csv(estab.smooth, "Data/processed_inputs/Establishment_SpeciesGroup_Plot_Climate_1km_smooth_1900-2013.csv", row.names=F)
 
@@ -260,5 +270,5 @@ write.csv(estab.group7, "Data/model_inputs/Establishment_SpeciesGroup_Climate_1k
 write.csv(estab.group7[estab.group7$Spp.Group=="QURU",], "Data/model_inputs/Establishment_SpeciesGroup_RF_QURU.csv", row.names=F)
 write.csv(estab.group7[estab.group7$Spp.Group=="QUPR",], "Data/model_inputs/Establishment_SpeciesGroup_RF_QUPR.csv", row.names=F)
 write.csv(estab.group7[estab.group7$Spp.Group=="NYSY",], "Data/model_inputs/Establishment_SpeciesGroup_RF_NYSY.csv", row.names=F)
-write.csv(estab.group7[estab.group7$Spp.Group=="BELE",], "Data/model_inputs/Establishment_SpeciesGroup_RF_BELE.csv", row.names=F)
+# write.csv(estab.group7[estab.group7$Spp.Group=="BELE",], "Data/model_inputs/Establishment_SpeciesGroup_RF_BELE.csv", row.names=F)
 write.csv(estab.group7[estab.group7$Spp.Group=="ACRU",], "Data/model_inputs/Establishment_SpeciesGroup_RF_ACRU.csv", row.names=F)
