@@ -7,4 +7,5 @@ original/*
 *.pdf
 Data/*/*.csv
 Data/*/*/*_summ.txt
+Data/analyses
 Figures/*

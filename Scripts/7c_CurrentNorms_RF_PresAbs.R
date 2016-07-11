@@ -1,6 +1,6 @@
 ####################################################
 # Random Forest Analysis of Species Distribution
-# Response: Current Forest IV
+# Response: Current Forest IV, Presence AND Absence
 # Predictors: weighted average from establishment events; (if IV = 0, climate norms & 2013 conditions)
 # 
 # Note: Compared with 2013 only Parameterzation & 30-year establishment/climate windows
@@ -20,9 +20,8 @@ set.seed(432) # Make results reproducible
 
 
 RF_data <- read.csv('Data/model_inputs/CurrentComp_SpeciesGroup_30ynorms_RF.csv') # Data file
-RF_data$Trans <- as.factor(substr(RF_data$PlotID, 4,4))
-RF_data$IV.log <- log(RF_data$IV.avg)
-selLst = scan('Data/model_inputs/selvar_Current3.txt',what='string') # List of selected predictors; this is held constant across species
+
+selLst = scan('Data/model_inputs/selvar_Current.txt',what='string') # List of selected predictors; this is held constant across species
 #nwdatv = read.csv('Cover_Climate_pred.csv') # Future climate predictors
 respvar = 'IV.avg' # name of response variable: percentage of trees in the plot established in a given year
 gisid = 'PlotID' # GIS-ID variable to map results - this is field should exist in the shapefile/coverage; Note: I'm just using it to tag indvidiual observations
@@ -36,7 +35,7 @@ for(s in species){
 print(paste0(" ============ ", s, " ============ "))
 
 # Initial data initialization stuff...
-incsvf <- RF_data[RF_data$Spp==s & RF_data$IV.avg>0,] # Subset only species of interest
+incsvf <- RF_data[RF_data$Spp==s,] # Subset only species of interest
 attach(incsvf)
 print(summary(incsvf[,]))
 print(dim(incsvf[]))
@@ -75,17 +74,17 @@ rf_rsq = rf_rsq[length(rf_rsq)]
 
 # VariIMP plot -> Model_rf_varimplot.png
 varImpPlot(rf.mod)
-vipltn = paste0('Figures/RF_Norm/Current_Norm_',s, '_varimplot','.png')
+vipltn = paste0('Figures/RF_Norm_PA/Current_Norm_',s, '_varimplot','.png')
 dev.print(png, vipltn, width=550, height=600)
 
 # MSE Plot -> Model_rf_mseplot.png
 mse = rf.mod$mse
 plot(mse, type='l', xlab="no. of trees", ylab="MSE(OOB)")
-msepltn = paste('Figures/RF_Norm/Current_Norm_',s,'_mseplot','.png',sep="")
+msepltn = paste('Figures/RF_Norm_PA/Current_Norm_',s,'_mseplot','.png',sep="")
 dev.print(png, msepltn, width=550, height=600)
 
 # Variable Importance table -> Model_rf_vitable.csv
-vitabn = paste('Data/analyses/RF_Norm/Current_Norm_',s,'_vitable','.txt',sep="")
+vitabn = paste('Data/analyses/RF_Norm_PA/Current_Norm_',s,'_vitable','.txt',sep="")
 sink(vitabn)
 rf_vi = data.frame(importance(rf.mod), ImpSD=rf.mod$importanceSD)  
 rf_vis = rf_vi[rev(order(rf_vi[,1])),] # Sort on IncMSE
@@ -93,7 +92,7 @@ print(rf_vis)
 sink()
 
 # Summary Statistics -> Model_rf_summ.txt
-rf_sumf = paste('Data/analyses/RF_Norm/Current_Norm_',s,'_summ','.txt',sep="")
+rf_sumf = paste('Data/analyses/RF_Norm_PA/Current_Norm_',s,'_summ','.txt',sep="")
 sink(rf_sumf)
 print(rf.mod$call)
 print("R-squared")
@@ -107,7 +106,7 @@ print(summary(rf.mod))
 print(rf_mtry)
 sink()
 
-save(rf.mod, file=paste0("Data/analyses/RF_Norm/", s, "_RFout.Rdata"))
+save(rf.mod, file=paste0("Data/analyses/RF_Norm_PA/", s, "_RFout.Rdata"))
 detach("incsvf")
 
 rm(pred.df, rf.mod)

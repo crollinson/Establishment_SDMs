@@ -270,5 +270,5 @@ write.csv(estab.group7, "Data/model_inputs/Establishment_SpeciesGroup_Climate_1k
 write.csv(estab.group7[estab.group7$Spp.Group=="QURU",], "Data/model_inputs/Establishment_SpeciesGroup_RF_QURU.csv", row.names=F)
 write.csv(estab.group7[estab.group7$Spp.Group=="QUPR",], "Data/model_inputs/Establishment_SpeciesGroup_RF_QUPR.csv", row.names=F)
 write.csv(estab.group7[estab.group7$Spp.Group=="NYSY",], "Data/model_inputs/Establishment_SpeciesGroup_RF_NYSY.csv", row.names=F)
-# write.csv(estab.group7[estab.group7$Spp.Group=="BELE",], "Data/model_inputs/Establishment_SpeciesGroup_RF_BELE.csv", row.names=F)
+write.csv(estab.group7[estab.group7$Spp.Group=="BELE",], "Data/model_inputs/Establishment_SpeciesGroup_RF_BELE.csv", row.names=F)
 write.csv(estab.group7[estab.group7$Spp.Group=="ACRU",], "Data/model_inputs/Establishment_SpeciesGroup_RF_ACRU.csv", row.names=F)

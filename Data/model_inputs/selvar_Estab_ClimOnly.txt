@@ -22,11 +22,5 @@ slope
 aspect
 sol.yr
 TPI
-time.Major
-peak.Major.mag
-peak.Major.ext
-time.Minor
-peak.Minor.mag
-peak.Minor.ext
-Trans
 Site
+Trans

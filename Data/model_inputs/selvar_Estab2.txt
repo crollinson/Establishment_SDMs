@@ -1,7 +1,11 @@
+Tmean.yr
+Tmean.MS
 Tmean.JFM
 Tmean.MAM
 Tmean.JJA
 Tmean.SON
+Precip.yr
+Precip.MS
 Precip.JFM
 Precip.MAM
 Precip.JJA
@@ -18,6 +22,7 @@ sieve200
 om
 aws.0150
 brock.dep.min
+elev
 slope
 aspect
 sol.yr
@@ -28,5 +33,4 @@ peak.Major.ext
 time.Minor
 peak.Minor.mag
 peak.Minor.ext
-Trans
 Site

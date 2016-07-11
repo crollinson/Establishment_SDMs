@@ -2,20 +2,249 @@
 # Synthesizing results from Random Forest Models
 ###############################################################################################
 rm(list=ls())
+setwd("~/Desktop/Personal/Penn State/Research/PhD Research/CARCA/Establishment_Modeling")
 
 library(car)
 library(ggplot2)
 library(grid)
+library(randomForest)
 
+
+###################################################
+# Do some initial setup
 ###################################################
 se <- function(x){
 	sd(x, na.rm=TRUE) / sqrt((length(!is.na(x))))}
 
-species <- c("QURU", "QUPR", "NYSY", "BELE", "ACRU")
+species <- c("QURU", "QUPR", "NYSY", "ACRU")
 
 q.blank <- theme(axis.line=element_line(color="black", size=0.5), panel.grid.major=element_blank(), panel.grid.minor= element_blank(), panel.border= element_blank(), panel.background= element_blank(), axis.text.x=element_text(angle=0, color="black", size=14, face="bold"), axis.text.y=element_text(color="black", size=12, face="bold"), axis.title.x=element_text(face="bold", size=14),  axis.title.y=element_text(face="bold", size=14))	
 
 large.axes2 <- theme(axis.line=element_line(color="black", size=0.5), panel.grid.major=element_blank(), panel.grid.minor= element_blank(), panel.border= element_blank(), panel.background= element_blank(), axis.text.x=element_text(angle=0, color="black", size=rel(1.75)), axis.text.y=element_text(color="black", size=rel(1.75)), axis.title.x=element_text(face="bold", size=rel(2), vjust=-1),  axis.title.y=element_text(face="bold", size=rel(2), vjust=0.2), plot.margin=unit(c(2,2,2,2), "lines")) + theme(legend.background=element_rect(fill="white"), legend.key=element_rect(color="white", fill=NA)) + theme(strip.text=element_text(size=rel(1.25), face="bold"))
+
+RF_data <- read.csv('Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv') # Data file
+RF_data$Trans <- as.factor(substr(RF_data$PlotID, 4,4))
+###################################################
+
+
+
+
+###################################################
+# Reading the results of the models
+###################################################
+# I'm tired so we're going to do this the long, ugly way
+imp.vals <- list()
+r2.vals <- list()
+mse.vals <- list()
+
+
+
+# ------------
+# Current Climate, Presence-Absence 
+# ------------
+load("Data//analyses/RF_Current_PA_ClimOnly/ACRU_RFout.Rdata")
+imp.vals[["PAClim"]] <- data.frame(var=row.names(importance(rf.mod)), ACRU=as.vector(importance(rf.mod, type=1)))
+r2.vals [["PAClim"]] <- data.frame(ACRU=max(rf.mod$rsq))
+mse.vals[["PAClim"]] <- data.frame(ACRU=min(rf.mod$mse))
+
+load("Data//analyses/RF_Current_PA_ClimOnly/NYSY_RFout.Rdata")
+imp.vals[["PAClim"]][,"NYSY"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["PAClim"]][,"NYSY"] <- max(rf.mod$rsq)
+mse.vals[["PAClim"]][,"NYSY"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_PA_ClimOnly/QUPR_RFout.Rdata")
+imp.vals[["PAClim"]][,"QUPR"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["PAClim"]][,"QUPR"] <- max(rf.mod$rsq)
+mse.vals[["PAClim"]][,"QUPR"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_PA_ClimOnly/QURU_RFout.Rdata")
+imp.vals[["PAClim"]][,"QURU"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["PAClim"]][,"QURU"] <- max(rf.mod$rsq)
+mse.vals[["PAClim"]][,"QURU"] <- min(rf.mod$mse)
+# ------------
+
+# ------------
+# Current Climate, Presence-Only 
+# ------------
+load("Data//analyses/RF_Current_ClimOnly/ACRU_RFout.Rdata")
+imp.vals[["CurClim"]] <- data.frame(var=row.names(importance(rf.mod)), ACRU=as.vector(importance(rf.mod, type=1)))
+r2.vals [["CurClim"]] <- data.frame(ACRU=max(rf.mod$rsq))
+mse.vals[["CurClim"]] <- data.frame(ACRU=min(rf.mod$mse))
+
+load("Data//analyses/RF_Current_ClimOnly/NYSY_RFout.Rdata")
+imp.vals[["CurClim"]][,"NYSY"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["CurClim"]][,"NYSY"] <- max(rf.mod$rsq)
+mse.vals[["CurClim"]][,"NYSY"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_ClimOnly/QUPR_RFout.Rdata")
+imp.vals[["CurClim"]][,"QUPR"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["CurClim"]][,"QUPR"] <- max(rf.mod$rsq)
+mse.vals[["CurClim"]][,"QUPR"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_ClimOnly/QURU_RFout.Rdata")
+imp.vals[["CurClim"]][,"QURU"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["CurClim"]][,"QURU"] <- max(rf.mod$rsq)
+mse.vals[["CurClim"]][,"QURU"] <- min(rf.mod$mse)
+# ------------
+
+# ------------
+# Establishment Climate, Presence-Only 
+# ------------
+load("Data//analyses/RF_Estab_ClimOnly/ACRU_RFout.Rdata")
+imp.vals[["EstabClim"]] <- data.frame(var=row.names(importance(rf.mod)), ACRU=as.vector(importance(rf.mod, type=1)))
+r2.vals [["EstabClim"]] <- data.frame(ACRU=max(rf.mod$rsq))
+mse.vals[["EstabClim"]] <- data.frame(ACRU=min(rf.mod$mse))
+
+load("Data//analyses/RF_Estab_ClimOnly/NYSY_RFout.Rdata")
+imp.vals[["EstabClim"]][,"NYSY"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["EstabClim"]][,"NYSY"] <- max(rf.mod$rsq)
+mse.vals[["EstabClim"]][,"NYSY"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Estab_ClimOnly/QUPR_RFout.Rdata")
+imp.vals[["EstabClim"]][,"QUPR"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["EstabClim"]][,"QUPR"] <- max(rf.mod$rsq)
+mse.vals[["EstabClim"]][,"QUPR"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Estab_ClimOnly/QURU_RFout.Rdata")
+imp.vals[["EstabClim"]][,"QURU"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["EstabClim"]][,"QURU"] <- max(rf.mod$rsq)
+mse.vals[["EstabClim"]][,"QURU"] <- min(rf.mod$mse)
+# ------------
+
+# ------------
+# Current Disturbance, Presence-Absence 
+# ------------
+load("Data//analyses/RF_Current_PA_Disturb/ACRU_RFout.Rdata")
+imp.vals[["PADisturb"]] <- data.frame(var=row.names(importance(rf.mod)), ACRU=as.vector(importance(rf.mod, type=1)))
+r2.vals [["PADisturb"]] <- data.frame(ACRU=max(rf.mod$rsq))
+mse.vals[["PADisturb"]] <- data.frame(ACRU=min(rf.mod$mse))
+
+load("Data//analyses/RF_Current_PA_Disturb/NYSY_RFout.Rdata")
+imp.vals[["PADisturb"]][,"NYSY"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["PADisturb"]][,"NYSY"] <- max(rf.mod$rsq)
+mse.vals[["PADisturb"]][,"NYSY"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_PA_Disturb/QUPR_RFout.Rdata")
+imp.vals[["PADisturb"]][,"QUPR"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["PADisturb"]][,"QUPR"] <- max(rf.mod$rsq)
+mse.vals[["PADisturb"]][,"QUPR"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_PA_Disturb/QURU_RFout.Rdata")
+imp.vals[["PADisturb"]][,"QURU"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["PADisturb"]][,"QURU"] <- max(rf.mod$rsq)
+mse.vals[["PADisturb"]][,"QURU"] <- min(rf.mod$mse)
+# ------------
+
+# ------------
+# Current Disturbance, Presence-Only 
+# ------------
+load("Data//analyses/RF_Current_Disturb/ACRU_RFout.Rdata")
+imp.vals[["CurDisturb"]] <- data.frame(var=row.names(importance(rf.mod)), ACRU=as.vector(importance(rf.mod, type=1)))
+r2.vals [["CurDisturb"]] <- data.frame(ACRU=max(rf.mod$rsq))
+mse.vals[["CurDisturb"]] <- data.frame(ACRU=min(rf.mod$mse))
+
+load("Data//analyses/RF_Current_Disturb/NYSY_RFout.Rdata")
+imp.vals[["CurDisturb"]][,"NYSY"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["CurDisturb"]][,"NYSY"] <- max(rf.mod$rsq)
+mse.vals[["CurDisturb"]][,"NYSY"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_Disturb/QUPR_RFout.Rdata")
+imp.vals[["CurDisturb"]][,"QUPR"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["CurDisturb"]][,"QUPR"] <- max(rf.mod$rsq)
+mse.vals[["CurDisturb"]][,"QUPR"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Current_Disturb/QURU_RFout.Rdata")
+imp.vals[["CurDisturb"]][,"QURU"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["CurDisturb"]][,"QURU"] <- max(rf.mod$rsq)
+mse.vals[["CurDisturb"]][,"QURU"] <- min(rf.mod$mse)
+# ------------
+
+# ------------
+# Establishment Disturbance, Presence-Only 
+# ------------
+load("Data//analyses/RF_Estab_Disturb/ACRU_RFout.Rdata")
+imp.vals[["EstabDisturb"]] <- data.frame(var=row.names(importance(rf.mod)), ACRU=as.vector(importance(rf.mod, type=1)))
+r2.vals [["EstabDisturb"]] <- data.frame(ACRU=max(rf.mod$rsq))
+mse.vals[["EstabDisturb"]] <- data.frame(ACRU=min(rf.mod$mse))
+
+load("Data//analyses/RF_Estab_Disturb/NYSY_RFout.Rdata")
+imp.vals[["EstabDisturb"]][,"NYSY"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["EstabDisturb"]][,"NYSY"] <- max(rf.mod$rsq)
+mse.vals[["EstabDisturb"]][,"NYSY"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Estab_Disturb/QUPR_RFout.Rdata")
+imp.vals[["EstabDisturb"]][,"QUPR"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["EstabDisturb"]][,"QUPR"] <- max(rf.mod$rsq)
+mse.vals[["EstabDisturb"]][,"QUPR"] <- min(rf.mod$mse)
+
+load("Data//analyses/RF_Estab_Disturb/QURU_RFout.Rdata")
+imp.vals[["EstabDisturb"]][,"QURU"] <- as.vector(importance(rf.mod, type=1))
+r2.vals [["EstabDisturb"]][,"QURU"] <- max(rf.mod$rsq)
+mse.vals[["EstabDisturb"]][,"QURU"] <- min(rf.mod$mse)
+# ------------
+
+# ------------
+# Stacking everything into a mega-dataframe so it's easier to manipulate
+# ------------
+imp.vals[["PAClim"      ]][,"Climate"] <- r2.vals[["PAClim"      ]][,"Climate"] <- mse.vals[["PAClim"      ]][,"Climate"] <- as.factor("Modern PA")
+imp.vals[["CurClim"     ]][,"Climate"] <- r2.vals[["CurClim"     ]][,"Climate"] <- mse.vals[["CurClim"     ]][,"Climate"] <- as.factor("Modern"   )
+imp.vals[["EstabClim"   ]][,"Climate"] <- r2.vals[["EstabClim"   ]][,"Climate"] <- mse.vals[["EstabClim"   ]][,"Climate"] <- as.factor("Estab"    )
+imp.vals[["PADisturb"   ]][,"Climate"] <- r2.vals[["PADisturb"   ]][,"Climate"] <- mse.vals[["PADisturb"   ]][,"Climate"] <- as.factor("Modern PA")
+imp.vals[["CurDisturb"  ]][,"Climate"] <- r2.vals[["CurDisturb"  ]][,"Climate"] <- mse.vals[["CurDisturb"  ]][,"Climate"] <- as.factor("Modern"   )
+imp.vals[["EstabDisturb"]][,"Climate"] <- r2.vals[["EstabDisturb"]][,"Climate"] <- mse.vals[["EstabDisturb"]][,"Climate"] <- as.factor("Estab"    )
+
+
+imp.vals[["PAClim"      ]][,"Disturb"] <- r2.vals[["PAClim"      ]][,"Disturb"] <- mse.vals[["PAClim"      ]][,"Disturb"] <- as.factor("NO" )
+imp.vals[["CurClim"     ]][,"Disturb"] <- r2.vals[["CurClim"     ]][,"Disturb"] <- mse.vals[["CurClim"     ]][,"Disturb"] <- as.factor("NO" )
+imp.vals[["EstabClim"   ]][,"Disturb"] <- r2.vals[["EstabClim"   ]][,"Disturb"] <- mse.vals[["EstabClim"   ]][,"Disturb"] <- as.factor("NO" )
+imp.vals[["PADisturb"   ]][,"Disturb"] <- r2.vals[["PADisturb"   ]][,"Disturb"] <- mse.vals[["PADisturb"   ]][,"Disturb"] <- as.factor("YES")
+imp.vals[["CurDisturb"  ]][,"Disturb"] <- r2.vals[["CurDisturb"  ]][,"Disturb"] <- mse.vals[["CurDisturb"  ]][,"Disturb"] <- as.factor("YES")
+imp.vals[["EstabDisturb"]][,"Disturb"] <- r2.vals[["EstabDisturb"]][,"Disturb"] <- mse.vals[["EstabDisturb"]][,"Disturb"] <- as.factor("YES")
+
+
+for(i in 1:length(imp.vals)){
+  imp.tmp <- stack(imp.vals[[i]][,species])
+  names(imp.tmp) <- c("%IncMSE", "Species")
+  imp.tmp[,c("var", "Climate", "Disturb")] <- imp.vals[[i]][,c("var", "Climate", "Disturb")]
+    
+  r2.tmp <- stack(r2.vals[[i]][,species])
+  names(r2.tmp) <- c("R2", "Species")
+  r2.tmp[,c("Climate", "Disturb")] <- r2.vals[[i]][,c("Climate", "Disturb")]
+
+  mse.tmp <- stack(mse.vals[[i]][,species])
+  names(mse.tmp) <- c("MSE", "Species")
+  mse.tmp[,c("Climate", "Disturb")] <- mse.vals[[i]][,c("Climate", "Disturb")]
+  
+  if(i==1){
+    imp.df <- imp.tmp
+    r2.df  <- r2.tmp
+    mse.df <- mse.tmp
+  } else {
+    imp.df <- rbind(imp.df, imp.tmp)
+    r2.df  <- rbind(r2.df , r2.tmp)
+    mse.df <- rbind(mse.df, mse.tmp)  
+  }
+}
+
+# ------------
+
+summary(imp.df)
+summary(r2.df)
+summary(mse.df)
+
+r2.df[r2.df$Species=="QURU",]
+r2.df[r2.df$Species=="QUPR",]
+r2.df[r2.df$Species=="NYSY",]
+r2.df[r2.df$Species=="ACRU",]
+
+mse.df[mse.df$Species=="QURU",]
+mse.df[mse.df$Species=="QUPR",]
+mse.df[mse.df$Species=="NYSY",]
+mse.df[mse.df$Species=="ACRU",]
+
+###################################################
+
+
 
 ###################################################
 # Importing and formatting model results 

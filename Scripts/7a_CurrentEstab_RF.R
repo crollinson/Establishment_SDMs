@@ -20,13 +20,14 @@ set.seed(432) # Make results reproducible
 
 
 RF_data <- read.csv('Data/model_inputs/CurrentComp_SpeciesGroup_EstabClimate_RF_NAfilled.csv') # Data file
+RF_data$Trans <- as.factor(substr(RF_data$PlotID, 4,4))
 
-selLst = scan('Data/model_inputs/selvar_Estab.txt',what='string') # List of selected predictors; this is held constant across species
+selLst = scan('Data/model_inputs/selvar_Estab3.txt',what='string') # List of selected predictors; this is held constant across species
 #nwdatv = read.csv('Cover_Climate_pred.csv') # Future climate predictors
 respvar = 'IV.avg' # name of response variable: percentage of trees in the plot established in a given year
 gisid = 'PlotID' # GIS-ID variable to map results - this is field should exist in the shapefile/coverage; Note: I'm just using it to tag indvidiual observations
 
-species <- c("ACRU", "BELE", "NYSY", "QUPR", "QURU") # Species to run through random forests
+species <- c("ACRU", "NYSY", "QUPR", "QURU") # Species to run through random forests
 
 ############
 ############
@@ -35,9 +36,9 @@ for(s in species){
 print(paste0(" ============ ", s, " ============ "))
 
 # Initial data initialization stuff...
-incsvf <- RF_data[RF_data$Spp==s,] # Subset only species of interest
+incsvf <- RF_data[RF_data$Spp==s & complete.cases(RF_data)& RF_data$IV.avg>0,] # Subset only species of interest
 attach(incsvf)
-print(summary(incsvf[,c("PlotID", "Spp", "IV.avg", "Tmean.yr", "Precip.yr")]))
+print(summary(incsvf[,]))
 print(dim(incsvf[]))
 
 
@@ -95,11 +96,19 @@ sink()
 rf_sumf = paste('Data/analyses/RF_Estab/Current_Estab_',s,'_summ','.txt',sep="")
 sink(rf_sumf)
 print(rf.mod$call)
-print("R-Square")
-print(rf_rsq)
+print("R-squared")
+print(paste0("Mean (SD): ", round(mean(rf.mod$rsq), 4), " (", round(sd(rf.mod$rsq), 4), ")"))
+print(paste0("Max: ", round(max(rf.mod$rsq), 4)))
+print("")
+print("MSE")
+print(paste0("Mean (SD): ", round(mean(rf.mod$mse), 4), " (", round(sd(rf.mod$mse), 4), ")"))
+print(paste0("Min: ", round(min(rf.mod$mse), 4)))
 print(summary(rf.mod))
 print(rf_mtry)
 sink()
+
+save(rf.mod, file=paste0("Data/analyses/RF_Estab/", s, "_RFout.Rdata"))
+detach("incsvf")
 
 rm(pred.df, rf.mod)
 }
